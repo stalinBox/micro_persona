@@ -1,0 +1,35 @@
+{
+  "perId":578148,
+  "catTipoIdentificacion": 18,
+  "catGenero": 21,
+  "catEstadoCivil": 24,
+  "perNombre": "ALEX ERICO test ",
+  "perApellido": "ALCIVAR VITERI test",
+  "perNombres": "ALCIVAR VITERI ALEX ERICO test",
+  "perIdentificacion": "1306927611",
+  "perRuc": "1306927611001",
+  "perFechaNac": "1971-11-19",
+  "perFuente": "SIGAP",
+  "perFuenteId": 25,
+  "perFuenteFecha": "2018-03-12T16:56:47.722+0000",
+  "perRccondicion": "CIUDADANO",
+  "perEstado": 11,
+  "perEliminado": false,
+  "perRegFecha": "2018-03-12T16:56:47.722+0000",
+  "perDirDomicilio": "AV.DEL VALLE MANABI GUILLEN CASA J-13 CDLA.CEIBOS DEL NORTE HOSPITAL SOLCA",
+  "perTelefono": "052445925",
+  "perCelular": "0052445925",
+  "perCorreo": "aalcivar@mag.gob.ec",
+  "personaTipos": [
+    {
+      "areaId": 10647,
+      "cargoId": 4,
+      "catTipoPer": 46,
+      "petiFuente": "sigap",
+      "petiFuenteFecha": "2018-03-12T18:35:20.988+0000",
+      "petiEstado": 12,
+      "petiEliminado": false,
+      "petiRegFecha": "2018-03-12T18:35:20.988+0000"
+    }
+  ]
+}
