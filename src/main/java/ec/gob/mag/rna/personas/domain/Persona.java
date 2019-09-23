@@ -323,6 +323,18 @@ public class Persona implements java.io.Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private Integer catInstruccionFormal;
 
+	@ApiModelProperty(value = "Año de Instruccion de formal de la persona")
+	@Column(name = "cat_instruccion_anio")
+	@JsonProperty("catInstruccionAnio")
+	@JsonInclude(Include.NON_NULL)
+	private Integer catInstruccionAnio;
+
+	@ApiModelProperty(value = "Categoria de la etnia de la persona (otra)")
+	@Column(name = "cat_etnia_otra")
+	@JsonProperty("catEtniaOtra")
+	@JsonInclude(Include.NON_NULL)
+	private Integer catEtniaOtra;
+
 	@ApiModelProperty(value = "Tipos persona")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona"/* ,orphanRemoval = true */
 			, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })

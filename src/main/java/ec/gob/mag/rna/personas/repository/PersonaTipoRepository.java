@@ -9,12 +9,13 @@ import org.springframework.stereotype.Repository;
 import ec.gob.mag.rna.personas.domain.PersonaTipo;
 
 @Repository("personaTipoRepository")
-public interface PersonaTipoRepository 
-		extends CrudRepository<PersonaTipo, Long> {
+public interface PersonaTipoRepository extends CrudRepository<PersonaTipo, Long> {
 	PersonaTipo save(PersonaTipo personaTipo);
-	
-	
+
 	Optional<PersonaTipo> findById(Long id);
+
 	List<PersonaTipo> findByPersona_Id(Long perId);
-	
+
+	List<PersonaTipo> findByareaId(Long areaId);
+
 }

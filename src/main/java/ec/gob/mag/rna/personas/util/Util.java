@@ -94,6 +94,8 @@ public class Util {
 			persona.setPerTipoContrSri(productor.getPerTipoContrSri());
 			persona.setUbiIdDomicilio(productor.getUbiIdDomicilio());
 			persona.setTipoProductor(productor.getTipoProductor());
+			// persona.setCatInstruccionAnio(null);
+			// persona.setCatEtniaOtra(null);
 			List<PersonaTipo> personasTipo = new ArrayList<>();
 			PersonaTipo personaTipo = new PersonaTipo();
 			personaTipo.setId(productor.getPetiId());
