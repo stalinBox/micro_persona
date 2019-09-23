@@ -333,7 +333,7 @@ public class Persona implements java.io.Serializable {
 	@Column(name = "cat_etnia_otra")
 	@JsonProperty("catEtniaOtra")
 	@JsonInclude(Include.NON_NULL)
-	private Integer catEtniaOtra;
+	private String catEtniaOtra;
 
 	@ApiModelProperty(value = "Tipos persona")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona"/* ,orphanRemoval = true */
