@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
+import ec.gob.mag.rna.personas.dto.PersonaDTO;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
 import ec.gob.mag.rna.personas.services.ProductorService;
@@ -44,7 +45,6 @@ public class ProductorController implements ErrorController {
 	@Qualifier("personaTipoService")
 	private PersonaTipoService personaTipoService;
 
-	
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor por numero de cedula", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
@@ -80,8 +80,7 @@ public class ProductorController implements ErrorController {
 		LOGGER.info("Productores findByUbiId: " + personas.toString());
 		return personas;
 	}
-	
-	
+
 	@RequestMapping(value = "/socio/findByUbiId/{ubiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un socio productor por Id de la Ubicacion", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
@@ -90,20 +89,18 @@ public class ProductorController implements ErrorController {
 		LOGGER.info("SocioProductor findByUbiId: " + personas.toString());
 		return personas;
 	}
-	
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseUpdate createProductor(@Valid @RequestBody Persona productor) {
-		Persona productorResponse = productorService.saveProductor(productor);
+	public ResponseUpdate createProductor(@Valid @RequestBody PersonaDTO productor) {
+		PersonaDTO productorResponse = productorService.saveProductor(productor);
 		LOGGER.info("Productor Create: " + productorResponse.toString());
 		return new ResponseUpdate("productor", productorResponse.getId());
 	}
 
 	@Override
 	public String getErrorPath() {
-		// TODO Auto-generated method stub
 		return PATH;
 	}
 }

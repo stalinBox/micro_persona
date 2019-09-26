@@ -1,6 +1,8 @@
-package ec.gob.mag.rna.personas.domain;
+package ec.gob.mag.rna.personas.dto;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -49,9 +51,9 @@ import lombok.ToString;
 @Entity
 @Table(name = "persona_tipo", schema = "sc_organizacion", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"area_id", "per_id", "cat_tipo_per" }))
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ord", scope = PersonaTipo.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ord", scope = PersonaTipoDTO.class)
 
-public class PersonaTipo implements java.io.Serializable {
+public class PersonaTipoDTO implements Serializable {
 	private static final long serialVersionUID = 5797912094414225146L;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona Tipo")
@@ -79,7 +81,7 @@ public class PersonaTipo implements java.io.Serializable {
 	@JsonProperty("persona")
 	@JsonInclude(Include.NON_NULL)
 	@JsonBackReference(value = "persona-persona-tipos")
-	private Persona persona;
+	private PersonaDTO persona;
 
 	@ApiModelProperty(value = "45=Funcionario 46=Ciudadano ...")
 	@Column(name = "cat_tipo_per")
@@ -147,11 +149,14 @@ public class PersonaTipo implements java.io.Serializable {
 	private Date petiActFecha;
 
 	@ApiModelProperty(value = "Campo productor")
-	@OneToOne(mappedBy = "personaTipo", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	// @OneToOne(mappedBy = "personaTipo", cascade = { CascadeType.PERSIST,
+	// CascadeType.MERGE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "personaTipo", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH })
 	@JsonProperty("productor")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-tipos-productor")
-	private Productor productor;
+	private List<ProductorDTO> productor;
 
 	@PrePersist
 	public void prePersist() {
