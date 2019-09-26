@@ -35,7 +35,7 @@ import lombok.ToString;
 //========== JPA ======================
 @Entity
 @Table(name = "vw_socios_tipo_productor", schema = "sc_organizacion")
-public class SociosTipoProductorView implements java.io.Serializable {
+public class SocioTipoProductorView implements java.io.Serializable {
 	private static final long serialVersionUID = 6540875718900178877L;
 
 	@ApiModelProperty(value = "Campo que almacena el nombre de la persona", required = true, allowableValues = "")

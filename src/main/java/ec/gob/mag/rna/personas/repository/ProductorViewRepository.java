@@ -10,7 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
-import ec.gob.mag.rna.personas.domain.view.SociosTipoProductorView;
+import ec.gob.mag.rna.personas.domain.view.SocioTipoProductorView;
 
 @Repository("productorViewRepository")
 public interface ProductorViewRepository extends CrudRepository<ProductorView, Long> {

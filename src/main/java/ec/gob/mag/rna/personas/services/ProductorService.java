@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
-import ec.gob.mag.rna.personas.domain.view.SociosTipoProductorView;
+import ec.gob.mag.rna.personas.domain.view.SocioTipoProductorView;
 import ec.gob.mag.rna.personas.dto.PersonaDTO;
 import ec.gob.mag.rna.personas.dto.PersonaTipoDTO;
 import ec.gob.mag.rna.personas.dto.ProductorDTO;
@@ -19,7 +19,7 @@ import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
 import ec.gob.mag.rna.personas.repository.PersonaRepository;
 import ec.gob.mag.rna.personas.repository.ProductorViewRepository;
-import ec.gob.mag.rna.personas.repository.SociosTipoProductorViewRepository;
+import ec.gob.mag.rna.personas.repository.SocioTipoProductorViewRepository;
 import ec.gob.mag.rna.personas.util.MyExceptionUtility;
 import ec.gob.mag.rna.personas.util.Util;
 
@@ -39,9 +39,9 @@ public class ProductorService {
 	@Qualifier("productorViewRepository")
 	private ProductorViewRepository productorRepository;
 
-	@Autowired
+	/*@Autowired
 	@Qualifier("sociotipoproductorViewRepository")
-	private SociosTipoProductorViewRepository sociotipoproductorRepository;
+	private SociosTipoProductorViewRepository sociotipoproductorRepository;*/
 
 	@Autowired
 	private MessageSource messageSource;
@@ -87,8 +87,8 @@ public class ProductorService {
 	 * @param Long ubiId
 	 * @return List<Persona>, si cumple la condición. Exception, si no cumple.
 	 */
-	public List<Persona> findSocioProductorByUbiIdDomicilio(Long ubiId) {
-		List<SociosTipoProductorView> socios = sociotipoproductorRepository.findByUbiId(ubiId);
+	/*public List<Persona> findSocioProductorByUbiIdDomicilio(Long ubiId) {
+		List<SocioTipoProductorView> socios = sociotipoproductorRepository.findByUbiId(ubiId);
 		if (socios == null || socios.size() == 0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", ubiId.toString(),
 					this.getClass(), "findSocioProductorByUbiIdDomicilio", EnumTypeExceptions.INFO,
@@ -96,7 +96,7 @@ public class ProductorService {
 			throw new MyNotFoundException(msg);
 		}
 		return Util.parseSociosToListPersonas(socios);
-	}
+	}*/
 
 	/**
 	 * Buscar productores por Organización Id.

@@ -81,7 +81,7 @@ public class ProductorController implements ErrorController {
 		return personas;
 	}
 
-	@RequestMapping(value = "/socio/findByUbiId/{ubiId}", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/socio/findByUbiId/{ubiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un socio productor por Id de la Ubicacion", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
 	public List<Persona> getSocioProductorByUbiId(@Valid @PathVariable Long ubiId) {
@@ -89,7 +89,7 @@ public class ProductorController implements ErrorController {
 		LOGGER.info("SocioProductor findByUbiId: " + personas.toString());
 		return personas;
 	}
-
+*/
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)

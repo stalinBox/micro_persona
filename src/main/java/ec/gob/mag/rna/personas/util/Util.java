@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.PersonaTipo;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
-import ec.gob.mag.rna.personas.domain.view.SociosTipoProductorView;
+import ec.gob.mag.rna.personas.domain.view.SocioTipoProductorView;
 
 public class Util {
 	public static String cleanBlanks(String str) {
@@ -107,7 +107,7 @@ public class Util {
 		return persona;
 	}
 
-	public static Persona parseSocioToPersona(SociosTipoProductorView socio) {
+	public static Persona parseSocioToPersona(SocioTipoProductorView socio) {
 		if (socio == null)
 			return null;
 		Persona persona = new Persona();
@@ -144,7 +144,7 @@ public class Util {
 		}).collect(Collectors.toList());
 	}
 
-	public static List<Persona> parseSociosToListPersonas(List<SociosTipoProductorView> socios) {
+	public static List<Persona> parseSociosToListPersonas(List<SocioTipoProductorView> socios) {
 		if (socios == null)
 			return null;
 		return socios.stream().map(s -> {
