@@ -94,7 +94,8 @@ public class FuncionarioController implements ErrorController {
 	public List<FuncionarioView> findByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
 			@PathVariable Long tpefId) {
 		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
-		if (tpefId.equals(new Long(0)) && perId.equals(new Long(0)))
+		//perfil adinistrador 18
+		if (tpefId.equals(new Long(18)) && perId.equals(new Long(0)))
 		{
 			funcionarios = funcionarioService.findByProyIdAndTpefId(proyId, new Long(16));
 		}
