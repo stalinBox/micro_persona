@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ec.gob.mag.rna.personas.domain.Persona;
+import ec.gob.mag.rna.personas.domain.sp.ProcedureProductor;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.PersonaDTO;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
@@ -45,14 +46,25 @@ public class ProductorController implements ErrorController {
 	@Qualifier("personaTipoService")
 	private PersonaTipoService personaTipoService;
 
+	/********* HACIENDO ***********/
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca un productor por numero de cedula", response = ProductorView.class)
+	@ApiOperation(value = "Busca un productor por numero de cedula", response = ProcedureProductor.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona getProductorByCedula(@Valid @PathVariable String cedula) {
-		Persona persona = productorService.findProductorByIdentificacion(cedula);
-		LOGGER.info("Productor findByCedula: " + persona.toString());
-		return persona;
+	public List<ProcedureProductor> getSPProductorByCedula(@Valid @PathVariable String cedula) {
+		List<ProcedureProductor> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
+		LOGGER.info("Productor findByCedula: " + procedureProductor.toString());
+		return procedureProductor;
 	}
+
+	/***** HECHO POR PAUL QUITARLO NO FUNCIONAL *******/
+//	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
+//	@ApiOperation(value = "Busca un productor por numero de cedula", response = ProductorView.class)
+//	@ResponseStatus(HttpStatus.OK)
+//	public Persona getProductorByCedula(@Valid @PathVariable String cedula) {
+//		Persona persona = productorService.findProductorByIdentificacion(cedula);
+//		LOGGER.info("Productor findByCedula: " + persona.toString());
+//		return persona;
+//	}
 
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor por Id", response = ProductorView.class)
@@ -81,15 +93,19 @@ public class ProductorController implements ErrorController {
 		return personas;
 	}
 
-	/*@RequestMapping(value = "/socio/findByUbiId/{ubiId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca un socio productor por Id de la Ubicacion", response = ProductorView.class)
-	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> getSocioProductorByUbiId(@Valid @PathVariable Long ubiId) {
-		List<Persona> personas = productorService.findSocioProductorByUbiIdDomicilio(ubiId);
-		LOGGER.info("SocioProductor findByUbiId: " + personas.toString());
-		return personas;
-	}
-*/
+	/*
+	 * @RequestMapping(value = "/socio/findByUbiId/{ubiId}", method =
+	 * RequestMethod.GET)
+	 * 
+	 * @ApiOperation(value = "Busca un socio productor por Id de la Ubicacion",
+	 * response = ProductorView.class)
+	 * 
+	 * @ResponseStatus(HttpStatus.OK) public List<Persona>
+	 * getSocioProductorByUbiId(@Valid @PathVariable Long ubiId) { List<Persona>
+	 * personas = productorService.findSocioProductorByUbiIdDomicilio(ubiId);
+	 * LOGGER.info("SocioProductor findByUbiId: " + personas.toString()); return
+	 * personas; }
+	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)

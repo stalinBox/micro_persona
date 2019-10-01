@@ -18,6 +18,7 @@ import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.domain.view.SocioTipoProductorView;
 
 public class Util {
+
 	public static String cleanBlanks(String str) {
 		str = str.replaceAll(" +", " ");
 		str = str.trim();

@@ -144,6 +144,51 @@ public class Productor implements java.io.Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private Long proTotalManoObra;
 
+	@Column(name = "pro_grupo_0_12")
+	@JsonProperty("proGrupo_0_12")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupo_0_12;
+
+	@Column(name = "pro_grupo_12_18")
+	@JsonProperty("proGrupo_12_18")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupo_12_18;
+
+	@Column(name = "pro_grupo_18_60")
+	@JsonProperty("proGrupo_18_60")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupo_18_60;
+
+	@Column(name = "pro_grupo_mayor_60")
+	@JsonProperty("proGrupoMayor_60")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupoMayor_60;
+
+	@Column(name = "pro_grupo_especiales_0_12")
+	@JsonProperty("proGrupoEspeciales_0_12")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupoEspeciales_0_12;
+
+	@Column(name = "pro_grupo_especiales_12_18")
+	@JsonProperty("proGrupoEspeciales_12_18")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupoEspeciales_12_18;
+
+	@Column(name = "pro_grupo_especiales_18_60")
+	@JsonProperty("proGrupoEspeciales_18_60")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupoEspeciales_18_60;
+
+	@Column(name = "pro_grupo_especiales_mayor_60")
+	@JsonProperty("proGrupoEspecialesMayores60")
+	@JsonInclude(Include.NON_NULL)
+	private Long proGrupoEspecialesMayores60;
+
+	@Column(name = "pro_total_recibe_bono_desarrollo")
+	@JsonProperty("proTotalRecibeBonoDesarrollo")
+	@JsonInclude(Include.NON_NULL)
+	private Long proTotalRecibeBonoDesarrollo;
+
 	@PrePersist
 	public void prePersist() {
 		this.proEstado = 11;
