@@ -17,6 +17,8 @@ public interface SocioTipoProductorViewRepository extends CrudRepository<SocioTi
 	List<SocioTipoProductorView> findByUbiId(Long ubiId);
 
 	List<SocioTipoProductorView> findByOrgId(Long orgId);
+	
+	List<SocioTipoProductorView> findByPetiId(Long petiId);
 
 	Optional<SocioTipoProductorView> findByPerIdentificacion(String perIdentificacion);
 	

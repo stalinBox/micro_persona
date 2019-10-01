@@ -7,6 +7,7 @@ import javax.persistence.Column;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,6 +35,7 @@ import lombok.ToString;
 @Builder
 //========== JPA ======================
 @Entity
+@IdClass(SocioProductorId.class)
 @Table(name = "vw_socios_tipo_productor", schema = "sc_organizacion")
 public class SocioTipoProductorView implements java.io.Serializable {
 	private static final long serialVersionUID = 6540875718900178877L;
@@ -126,8 +128,9 @@ public class SocioTipoProductorView implements java.io.Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private String perLugarNacRc;
 
+	@Id
 	@ApiModelProperty(value = "Id de lo Organizacion a la que pertenece")
-	@Column(name = "org_id", length = 512)
+	@Column(name = "org_id")
 	@JsonProperty("orgId")
 	@JsonInclude(Include.NON_NULL)
 	private Long orgId;
@@ -140,7 +143,7 @@ public class SocioTipoProductorView implements java.io.Serializable {
 
 	@Id
 	@ApiModelProperty(value = "Id de peti id como productor")
-	@Column(name = "peti_id", length = 512)
+	@Column(name = "peti_id")
 	@JsonProperty("petiId")
 	@JsonInclude(Include.NON_NULL)
 	private Long petiId;

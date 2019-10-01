@@ -1,6 +1,8 @@
 package ec.gob.mag.rna.personas.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.view.SocioTipoProductorView;
-
+import ec.gob.mag.rna.personas.dto.ProductorOrganizacionDTO;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
 import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
@@ -84,6 +86,32 @@ public class SocioTipoProductorViewService {
 		}
 		return Util.parseSociosToListPersonas(productores);
 	}
-
 	
+	
+	/**
+	 * Buscar productores por Peti Id.
+	 *
+	 * @param Long petiId
+	 * @return List<ProductorOrganizacionDTO>, que cumplen con la condición. Exception, si no cumple.
+	 */
+	public List<ProductorOrganizacionDTO> findByPetiId(Long petiId) {
+		List<SocioTipoProductorView> productores = sociotipoproductorRepository.findByPetiId(petiId);
+		if (productores == null || productores.size() == 0) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", petiId.toString(),
+					this.getClass(), "findByPetiId", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
+					messageSource);
+			throw new MyNotFoundException(msg);
+		}
+		
+		List<ProductorOrganizacionDTO> polist = new ArrayList<ProductorOrganizacionDTO>();
+		productores.stream().map( pro ->{
+			ProductorOrganizacionDTO po = new ProductorOrganizacionDTO();
+			po.setOrgId(pro.getOrgId());
+			po.setPetiId(pro.getPetiId());
+			polist.add(po);
+			return pro;
+		}).collect(Collectors.toList());
+		
+		return polist;
+	}
 }
