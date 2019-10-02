@@ -107,11 +107,12 @@ public class Util {
 		return persona;
 	}
 
-	public static Persona parseSocioToPersona(SocioTipoProductorView socio) {
+	/*public static Persona parseSocioToPersona(SocioTipoProductorView socio) {
 		if (socio == null)
 			return null;
 		Persona persona = new Persona();
 		if (socio != null) {
+			persona.setId(socio.getPetiId());
 			persona.setPerActFecha(socio.getPerActFecha());
 			persona.setPerApellido(socio.getPerApellido());
 			persona.setPerCedula(socio.getPerCedula());
@@ -134,7 +135,7 @@ public class Util {
 			persona.setPersonaTipos(personasTipo);
 		}
 		return persona;
-	}
+	}*/
 
 	public static List<Persona> parseToListPersona(List<ProductorView> productores) {
 		if (productores == null)
@@ -144,13 +145,13 @@ public class Util {
 		}).collect(Collectors.toList());
 	}
 
-	public static List<Persona> parseSociosToListPersonas(List<SocioTipoProductorView> socios) {
+	/*public static List<Persona> parseSociosToListPersonas(List<SocioTipoProductorView> socios) {
 		if (socios == null)
 			return null;
 		return socios.stream().map(s -> {
 			return parseSocioToPersona(s);
 		}).collect(Collectors.toList());
-	}
+	}*/
 
 	public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
 		Map<Object, Boolean> map = new ConcurrentHashMap<>();

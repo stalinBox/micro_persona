@@ -20,7 +20,7 @@ public interface SocioTipoProductorViewRepository extends CrudRepository<SocioTi
 	
 	List<SocioTipoProductorView> findByPetiId(Long petiId);
 
-	Optional<SocioTipoProductorView> findByPerIdentificacion(String perIdentificacion);
+	List<SocioTipoProductorView> findByPerIdentificacion(String perIdentificacion);
 	
 	
 }

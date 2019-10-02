@@ -15,9 +15,10 @@ import ec.gob.mag.rna.personas.dto.ProductorOrganizacionDTO;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
 import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
+import ec.gob.mag.rna.personas.repository.PersonaRepository;
 import ec.gob.mag.rna.personas.repository.SocioTipoProductorViewRepository;
 import ec.gob.mag.rna.personas.util.MyExceptionUtility;
-import ec.gob.mag.rna.personas.util.Util;
+
 
 /**
  * Clase ProductorService.
@@ -32,9 +33,35 @@ public class SocioTipoProductorViewService {
 	@Autowired
 	@Qualifier("sociotipoproductorviewRepository")
 	private SocioTipoProductorViewRepository sociotipoproductorRepository;
+	
+	@Autowired
+	@Qualifier("personaRepository")
+	private PersonaRepository personaRepository;
 
 	@Autowired
 	private MessageSource messageSource;
+	
+	
+	private Persona objectPersona(SocioTipoProductorView sp)
+	{
+		Persona per= personaRepository.findByPersonaTipos_Id(sp.getPetiId());
+		return per;
+	}
+	
+	
+	private List<Persona> listPersona(List<SocioTipoProductorView> lsp)
+	{
+		List<Persona> personas=new ArrayList<Persona>();
+		lsp.stream().map( sp->{
+			Persona per=this.objectPersona(sp);
+			if (per!=null)
+			{
+				personas.add(per);
+			}		
+		return sp;
+		}).collect(Collectors.toList());
+	return personas;
+	}
 
 	/**
 	 * Buscar productor por cédula
@@ -43,14 +70,14 @@ public class SocioTipoProductorViewService {
 	 * @return Persona, si cumple la condición. Exception, si no cumple.
 	 */
 	public Persona findProductorByIdentificacion(String identificacion) {
-		SocioTipoProductorView productor = sociotipoproductorRepository.findByPerIdentificacion(identificacion).get();
-		if (productor == null) {
+		List<SocioTipoProductorView> productores = sociotipoproductorRepository.findByPerIdentificacion(identificacion);
+		if (productores == null || productores.size()==0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
 					identificacion.toString(), this.getClass(), "findProductorByIdentificacion",
 					EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
 			throw new MyNotFoundException(msg);
 		}
-		return Util.parseSocioToPersona(productor);
+		return objectPersona(productores.get(0));
 	}
 
 	/**
@@ -67,7 +94,7 @@ public class SocioTipoProductorViewService {
 					EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
 			throw new MyNotFoundException(msg);
 		}
-		return Util.parseSociosToListPersonas(productores);
+		return listPersona(productores);
 	}
 
 	/**
@@ -83,8 +110,8 @@ public class SocioTipoProductorViewService {
 					this.getClass(), "findByOrgId", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
 					messageSource);
 			throw new MyNotFoundException(msg);
-		}
-		return Util.parseSociosToListPersonas(productores);
+		}				
+		return listPersona(productores);
 	}
 	
 	

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.ProductorOrganizacionDTO;
+import ec.gob.mag.rna.personas.services.PersonaService;
 import ec.gob.mag.rna.personas.services.SocioTipoProductorViewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -69,10 +70,10 @@ public class SocioTipoProductorViewController implements ErrorController {
 		return personas;
 	}
 	
-	@RequestMapping(value = "/findByPetiId/{petiId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca socios por PetiId", response = ProductorView.class)
+	@RequestMapping(value = "/findOrgByPetiId/{petiId}", method = RequestMethod.GET)
+	@ApiOperation(value = "Busca las organizaciones del petiId", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProductorOrganizacionDTO> findByPetiId(@Valid @PathVariable Long petiId) {
+	public List<ProductorOrganizacionDTO> findOrgByPetiId(@Valid @PathVariable Long petiId) {
 		List<ProductorOrganizacionDTO> proorgs = sociotipoproductorviewService.findByPetiId(petiId);
 		LOGGER.info("Socio Tipo Productores findByPetiId: " + proorgs.toString());
 		return proorgs;
