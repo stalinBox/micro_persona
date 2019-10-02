@@ -51,8 +51,6 @@ import lombok.ToString;
 @Entity
 @Table(name = "persona_tipo", schema = "sc_organizacion", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"area_id", "per_id", "cat_tipo_per" }))
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ord", scope = PersonaTipoDTO.class)
-
 public class PersonaTipoDTO implements Serializable {
 	private static final long serialVersionUID = 5797912094414225146L;
 

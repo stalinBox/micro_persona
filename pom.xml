@@ -110,13 +110,18 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.projectlombok</groupId> -->
+		<!-- <artifactId>lombok</artifactId> -->
+		<!-- <version>1.18.10</version>$NO-MVN-MAN-VER$ -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.10</version><!--$NO-MVN-MAN-VER$ -->
+			<version>edge-SNAPSHOT</version><!--$NO-MVN-MAN-VER$ -->
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -131,6 +136,10 @@
 	</build>
 
 	<repositories>
+		<repository>
+			<id>projectlombok.org</id>
+			<url>https://projectlombok.org/edge-releases</url>
+		</repository>
 		<repository>
 			<id>spring-snapshots</id>
 			<name>Spring Snapshots</name>

@@ -362,7 +362,6 @@ public class Persona implements java.io.Serializable {
 		this.perActUsu = null;
 		this.perEliminado = false;
 		this.perCedula = this.perIdentificacion;
-
 	}
 
 	@PreUpdate
