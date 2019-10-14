@@ -336,8 +336,8 @@ public class Persona implements java.io.Serializable {
 	private String catEtniaOtra;
 
 	@ApiModelProperty(value = "Tipos persona")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona"/* ,orphanRemoval = true */
-			, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH })
 	@JsonProperty("personaTipos")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-persona-tipos")

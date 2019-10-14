@@ -1,10 +1,12 @@
 package ec.gob.mag.rna.personas.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,8 @@ import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.sp.ProcedureProductor;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.PersonaDTO;
+import ec.gob.mag.rna.personas.dto.PersonaTipoDTO;
+import ec.gob.mag.rna.personas.dto.ProductorDTO;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
 import ec.gob.mag.rna.personas.services.ProductorService;
@@ -57,25 +61,21 @@ public class ProductorController implements ErrorController {
 		return new ResponseUpdate("productor", productorResponse.getId());
 	}
 
-	/*********** METODOS UPDATE ************/
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	@ApiOperation(value = "Actualiza un productor", response = ResponseUpdate.class)
-	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
+	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseUpdate updateProductor(@Valid @RequestBody PersonaDTO productor) {
-		boolean flat;
-		// PersonaDTO productor =
-		// productorService.findProductorSPByIdentificacion(cedula);
-
 		PersonaDTO productorResponse = productorService.saveProductor(productor);
-		LOGGER.info("Productor Create: " + productorResponse.toString());
+		LOGGER.info("Productor update: " + productorResponse.toString());
 		return new ResponseUpdate("productor", productorResponse.getId());
 	}
 
-	/*********** METODOS GET ***************/
+	/*********** METODOS SELECT ***************/
 	@RequestMapping(value = "/findByCedulaProductor/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por numero de cedula", response = ProcedureProductor.class)
 	@ResponseStatus(HttpStatus.OK)
 	public List<ProcedureProductor> getSPProductorByCedula(@Valid @PathVariable String cedula) {
+		System.out.println("=====> CEDULA: " + cedula);
 		List<ProcedureProductor> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
 		LOGGER.info("Productor findByCedula: " + procedureProductor.toString());
 		return procedureProductor;

@@ -1,6 +1,7 @@
 package ec.gob.mag.rna.personas.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -332,25 +333,26 @@ public class PersonaDTO implements Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private String catEtniaOtra;
 
-	@ApiModelProperty(value = "Tipos persona")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH })
-	@JsonProperty("personaTipos")
-	@JsonInclude(Include.NON_NULL)
-	@JsonManagedReference(value = "persona-persona-tipos")
-	private List<PersonaTipoDTO> personaTipos;
-
 	@ApiModelProperty(value = "Variable transitoria de petiId", required = true)
 	@Transient
 	@JsonProperty("petiId")
 	@JsonInclude(Include.NON_NULL)
 	private Long petiId;
 
-	@ApiModelProperty(value = "Tipo de productor")
 	@Transient
+	@ApiModelProperty(value = "Tipo de productor")
 	@JsonProperty("tipoProductor")
 	@JsonInclude(Include.NON_NULL)
 	private String tipoProductor;
+
+	/********* RELACIONES JPA ************/
+	@ApiModelProperty(value = "Tipos persona")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, orphanRemoval = true)
+	@JsonProperty("personaTipos")
+	@JsonInclude(Include.NON_NULL)
+	@JsonManagedReference(value = "persona-persona-tipos")
+	private List<PersonaTipoDTO> personaTipos = new ArrayList<PersonaTipoDTO>();
 
 	@PrePersist
 	public void prePersist() {
@@ -359,13 +361,11 @@ public class PersonaDTO implements Serializable {
 		this.perActUsu = null;
 		this.perEliminado = false;
 		this.perCedula = this.perIdentificacion;
-
 	}
 
 	@PreUpdate
 	public void preUpdate() {
 		this.perCedula = this.perIdentificacion;
-
 	}
 
 }

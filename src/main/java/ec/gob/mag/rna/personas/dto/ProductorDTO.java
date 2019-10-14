@@ -52,14 +52,6 @@ public class ProductorDTO implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla persona tipo")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "peti_id")
-	@JsonProperty("personaTipo")
-	@JsonInclude(Include.NON_NULL)
-	@JsonBackReference(value = "persona-tipos-productor")
-	private PersonaTipoDTO personaTipo;
-
 	@ApiModelProperty(value = "368=act.agricola 369=act.pecuaria 370=act.forestal...")
 	@Column(name = "cat_act_economica")
 	@JsonProperty("catActEconomica")
@@ -141,6 +133,15 @@ public class ProductorDTO implements Serializable {
 	@JsonProperty("proTotalManoObra")
 	@JsonInclude(Include.NON_NULL)
 	private Long proTotalManoObra;
+
+	/********** RELACIONES JPA ***********/
+	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla persona tipo")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "peti_id")
+	@JsonProperty("personaTipo")
+	@JsonInclude(Include.NON_NULL)
+	@JsonBackReference(value = "persona-tipos-productor")
+	private PersonaTipoDTO personaTipo;
 
 	@PrePersist
 	public void prePersist() {

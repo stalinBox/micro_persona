@@ -73,14 +73,6 @@ public class PersonaTipoDTO implements Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private Long cargoId;
 
-	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "per_id")
-	@JsonProperty("persona")
-	@JsonInclude(Include.NON_NULL)
-	@JsonBackReference(value = "persona-persona-tipos")
-	private PersonaDTO persona;
-
 	@ApiModelProperty(value = "45=Funcionario 46=Ciudadano ...")
 	@Column(name = "cat_tipo_per")
 	@JsonProperty("catTipoPer")
@@ -146,15 +138,22 @@ public class PersonaTipoDTO implements Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private Date petiActFecha;
 
+	/*********** RELACIONES JPA ***********/
 	@ApiModelProperty(value = "Campo productor")
-	// @OneToOne(mappedBy = "personaTipo", cascade = { CascadeType.PERSIST,
-	// CascadeType.MERGE, CascadeType.REFRESH })
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "personaTipo", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH })
+			CascadeType.REFRESH }, orphanRemoval = true)
 	@JsonProperty("productor")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-tipos-productor")
 	private List<ProductorDTO> productor;
+
+	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "per_id")
+	@JsonProperty("persona")
+	@JsonInclude(Include.NON_NULL)
+	@JsonBackReference(value = "persona-persona-tipos")
+	private PersonaDTO persona;
 
 	@PrePersist
 	public void prePersist() {
