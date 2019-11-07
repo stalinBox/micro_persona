@@ -36,7 +36,7 @@ import io.swagger.annotations.ApiResponse;
 @RequestMapping("/productor")
 @Api(value = "Productor", description = "Servicios de busqueda de productores", tags = "Productor")
 @ApiResponses(value = { @ApiResponse(code = 200, message = "Objeto recuperado"),
-		@ApiResponse(code = 201, message = "Objeto creado"),
+		@ApiResponse(code = 200, message = "Objeto creado"),
 		@ApiResponse(code = 404, message = "Recurso no encontrado"),
 		@ApiResponse(code = 500, message = "Error interno") })
 
@@ -82,7 +82,7 @@ public class ProductorController implements ErrorController {
 	}
 
 	/*****
-	 * HECHO POR PAUL --> ESTA IMPLEMENTADO EN EL SICPAS
+	 * HECHO POR PAUL --> ESTA IMPLEMENTADO EN EL SICPAS A CONSIDERAR *
 	 *******/
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor por numero de cedula", response = ProductorView.class)

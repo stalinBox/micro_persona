@@ -43,22 +43,18 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	@Autowired
 	private MessageSource messageSource;
 	private final static Logger LOGGER = LoggerFactory.getLogger(ResponseEntityExceptionHandler.class);
-    
-	
-	@Value("${url.log}")
-	private String urlMicroLog;
-	
-	@Value("${url.servidor_micro}")
-	private String urlServidor;
-	
-	
-	
 
-	
+//	@Value("${url.log}")
+//	private String urlMicroLog;
+//
+//	@Value("${url.servidor_micro}")
+//	private String urlServidor;
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public final ResponseEntity buildException(Exception ex, HttpStatus status, String msgProperty, String msgDetail, String msgException, EnumCodeExceptions myTypeCod) {
-		String proyecto=messageSource.getMessage("name.proyect", null, LocaleContextHolder.getLocale());
-		
+	public final ResponseEntity buildException(Exception ex, HttpStatus status, String msgProperty, String msgDetail,
+			String msgException, EnumCodeExceptions myTypeCod) {
+		String proyecto = messageSource.getMessage("name.proyect", null, LocaleContextHolder.getLocale());
+
 		ExceptionResponse exResponse;
 		try {
 			String jsonStringU = ex.getMessage();
@@ -67,25 +63,25 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 			myEx.setStatus(status);
 			myEx.setTimestamp(new Date());
 			exResponse = myEx;
-			String stack=MyExceptionUtility.getExceptionDump(ex);
+			String stack = MyExceptionUtility.getExceptionDump(ex);
 			myEx.setStack(stack);
 
 		} catch (Exception e) {
 			String msgEx = null;
-			if(msgException==null)
-			{
+			if (msgException == null) {
 				if (msgProperty != null)
 					msgEx = messageSource.getMessage(msgProperty, null, LocaleContextHolder.getLocale());
 				else
 					msgEx = ex.getMessage();
-			}
-			else
-				msgEx=msgException;
-			String stack=MyExceptionUtility.getExceptionDump(ex);
-			myTypeCod = (myTypeCod==null? EnumCodeExceptions.ERROR_UNRECOGNIZABLE: myTypeCod );
-			EnumTypeExceptions myTypeEx = (myTypeCod==EnumCodeExceptions.ERROR_UNRECOGNIZABLE? EnumTypeExceptions.CRITICAL: EnumTypeExceptions.WARN );
-			exResponse = new ExceptionResponse(status, new Date(), msgEx, null, msgDetail, proyecto, null,null,
-					myTypeCod,myTypeEx ,stack);
+			} else
+				msgEx = msgException;
+			String stack = MyExceptionUtility.getExceptionDump(ex);
+			myTypeCod = (myTypeCod == null ? EnumCodeExceptions.ERROR_UNRECOGNIZABLE : myTypeCod);
+			EnumTypeExceptions myTypeEx = (myTypeCod == EnumCodeExceptions.ERROR_UNRECOGNIZABLE
+					? EnumTypeExceptions.CRITICAL
+					: EnumTypeExceptions.WARN);
+			exResponse = new ExceptionResponse(status, new Date(), msgEx, null, msgDetail, proyecto, null, null,
+					myTypeCod, myTypeEx, stack);
 
 		}
 		return new ResponseEntity(exResponse, status);
@@ -93,91 +89,89 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllException(Exception ex, WebRequest request) {
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null,null,null, null);
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(MyNotFoundException.class)
 	public final ResponseEntity<Object> handleMyNotFoundException(Exception ex, WebRequest request) {
-		return buildException(ex, HttpStatus.NOT_FOUND, null,null,null, null);
+		return buildException(ex, HttpStatus.NOT_FOUND, null, null, null, null);
 	}
+
 	@ExceptionHandler(MyInternalException.class)
 	public final ResponseEntity<Object> handleMyInternalException(Exception ex, WebRequest request) {
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null,null,null, null);
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
 	}
 
 	@ExceptionHandler(CmNotFoundException.class)
 	public final ResponseEntity<Object> handleNotFoundException(Exception ex, WebRequest request) {
-		return buildException(ex, HttpStatus.NOT_FOUND, null,null,null, null);
+		return buildException(ex, HttpStatus.NOT_FOUND, null, null, null, null);
 	}
 
 	@ExceptionHandler(MyBadRequestException.class)
 	public final ResponseEntity<Object> handleBadRequestException(Exception ex, WebRequest request) {
-		return buildException(ex, HttpStatus.BAD_REQUEST, null,null,null, null);
+		return buildException(ex, HttpStatus.BAD_REQUEST, null, null, null, null);
 	}
-	
+
 	// ERRORES INTERNOS
 
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(IllegalArgumentException.class)
-	public final ResponseEntity<Object>
-				 handleIllegalArgumentException(Exception ex, WebRequest request ){
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null,null,null, null);
-		
+	public final ResponseEntity<Object> handleIllegalArgumentException(Exception ex, WebRequest request) {
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
+
 	}
-	
 
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(RollbackException.class)
-	public final ResponseEntity<Object>
-				 handleRollbackException(Exception ex, WebRequest request ){
-		return buildException(null, HttpStatus.INTERNAL_SERVER_ERROR, null,null,"sssssss", null);
-		
+	public final ResponseEntity<Object> handleRollbackException(Exception ex, WebRequest request) {
+		return buildException(null, HttpStatus.INTERNAL_SERVER_ERROR, null, null, "sssssss", null);
+
 	}
 
-	 @ExceptionHandler(TransactionSystemException.class )
-	    protected ResponseEntity<Object> handleConflict(TransactionSystemException ex, WebRequest request) {
-	        LOGGER.error("Caught", ex);
-	        Throwable cause = ex.getRootCause();
+	@ExceptionHandler(TransactionSystemException.class)
+	protected ResponseEntity<Object> handleConflict(TransactionSystemException ex, WebRequest request) {
+		LOGGER.error("Caught", ex);
+		Throwable cause = ex.getRootCause();
 
-	        if (cause instanceof ConstraintViolationException) {
-	           Set<ConstraintViolation<?>> constraintViolations = ((ConstraintViolationException) cause).getConstraintViolations();
-	           // iterate the violations to create your JSON user friendly message
-	           String msg = "pRUEBA";
-	           return handleExceptionInternal(ex, msg , new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	      }
-	        return null;
+		if (cause instanceof ConstraintViolationException) {
+			Set<ConstraintViolation<?>> constraintViolations = ((ConstraintViolationException) cause)
+					.getConstraintViolations();
+			// iterate the violations to create your JSON user friendly message
+			String msg = "pRUEBA";
+			return handleExceptionInternal(ex, msg, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		}
+		return null;
 
-	    }        
-	
+	}
+
 	@ExceptionHandler(NoSuchElementException.class)
-	public final ResponseEntity<Object>
-				 handleNoSuchElementException(Exception ex, WebRequest request ){
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.entity_not_exist_find_array.message",null,null, null);
+	public final ResponseEntity<Object> handleNoSuchElementException(Exception ex, WebRequest request) {
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.entity_not_exist_find_array.message", null,
+				null, null);
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public final ResponseEntity<Object>
-				 handleConstraintViolationException(Exception ex, WebRequest request ){
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.constraint_validation.message",null,null, EnumCodeExceptions.WARNING_CONTRAINT_SHEMA);
+	public final ResponseEntity<Object> handleConstraintViolationException(Exception ex, WebRequest request) {
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.constraint_validation.message", null, null,
+				EnumCodeExceptions.WARNING_CONTRAINT_SHEMA);
 
 	}
-	@SuppressWarnings("unchecked")
-	@ExceptionHandler(value = { ConstraintViolationException.class})
-    @ResponseBody 
-    ResponseEntity<Object> handleNotAuthenticated(RuntimeException ex, WebRequest request) {
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.constraint_validation.message",null,null, null);
 
-    }
-	
-	
+	@SuppressWarnings("unchecked")
+	@ExceptionHandler(value = { ConstraintViolationException.class })
+	@ResponseBody
+	ResponseEntity<Object> handleNotAuthenticated(RuntimeException ex, WebRequest request) {
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.constraint_validation.message", null, null,
+				null);
+
+	}
+
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(StackOverflowError.class)
-	public final ResponseEntity<Object>
-				 handleStackOverFlowError(Exception ex, WebRequest request ){
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null,null,null, null);
+	public final ResponseEntity<Object> handleStackOverFlowError(Exception ex, WebRequest request) {
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
 
 	}
 	//
@@ -185,13 +179,13 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(InternalError.class)
 	public final ResponseEntity<Object> handleInternalException(Exception ex, WebRequest request) {
-		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null,null,null, null);
+		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(org.springframework.dao.IncorrectResultSizeDataAccessException.class)
 	public final ResponseEntity<Object> handleNonUniqueResultException(Exception ex, WebRequest request) {
-		return buildException(ex, HttpStatus.NOT_FOUND, "error.non_unique_result.message",null,null, null);
+		return buildException(ex, HttpStatus.NOT_FOUND, "error.non_unique_result.message", null, null, null);
 
 	}
 
@@ -242,26 +236,9 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		}
 
 		messageDetail = messageDetail + "}";
-		messageDetail = ModifyString.cleanBlanks(messageDetail);		
-		return buildException(ex, HttpStatus.BAD_REQUEST, "error.method_argument_not_valid_exception.message",messageDetail,null,null);
+		messageDetail = ModifyString.cleanBlanks(messageDetail);
+		return buildException(ex, HttpStatus.BAD_REQUEST, "error.method_argument_not_valid_exception.message",
+				messageDetail, null, null);
 	}
-
-	/*
-	 * @ExceptionHandler(NumberFormatException.class) public ResponseEntity<Object>
-	 * handleNumberException(Exception ex, WebRequest request ){ // get spring
-	 * errors BindingResult result = ex.getB; List<FieldError> fieldErrors =
-	 * result.getFieldErrors();
-	 * 
-	 * // convert errors to standard string StringBuilder errorMessage = new
-	 * StringBuilder(); fieldErrors.forEach(f -> errorMessage.append(f.getField() +
-	 * " " + f.getDefaultMessage() + " "));
-	 * 
-	 * // return error info object with standard json ErrorInfo errorInfo = new
-	 * ErrorInfo(HttpStatus.BAD_REQUEST.value(), errorMessage.toString(),
-	 * request.getRequestURI()); return new ResponseEntity<>(errorInfo,
-	 * HttpStatus.BAD_REQUEST);
-	 * 
-	 * }
-	 */
 
 }
