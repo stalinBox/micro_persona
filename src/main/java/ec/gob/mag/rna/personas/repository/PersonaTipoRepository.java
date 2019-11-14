@@ -10,6 +10,7 @@ import ec.gob.mag.rna.personas.domain.PersonaTipo;
 
 @Repository("personaTipoRepository")
 public interface PersonaTipoRepository extends CrudRepository<PersonaTipo, Long> {
+	@SuppressWarnings("unchecked")
 	PersonaTipo save(PersonaTipo personaTipo);
 
 	Optional<PersonaTipo> findById(Long id);

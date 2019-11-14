@@ -13,7 +13,6 @@ import javax.validation.constraints.Email;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.Transient;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,8 +29,7 @@ import lombok.ToString;
 //============== LOMBOK =============
 @Getter
 @Setter
-@ToString(of = "idProd")
-//@EqualsAndHashCode(of="id")
+@ToString(of = "proId")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.ProductorOrganizacionDTO;
-import ec.gob.mag.rna.personas.services.PersonaService;
 import ec.gob.mag.rna.personas.services.SocioTipoProductorViewService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,14 +33,13 @@ import io.swagger.annotations.ApiResponses;
 		@ApiResponse(code = 404, message = "Recurso no encontrado"),
 		@ApiResponse(code = 500, message = "Error interno") })
 public class SocioTipoProductorViewController implements ErrorController {
-	
+
 	private static final String PATH = "/error";
 	public static final Logger LOGGER = LoggerFactory.getLogger(ProductorController.class);
 
 	@Autowired
 	@Qualifier("sociotipoproductorviewService")
 	private SocioTipoProductorViewService sociotipoproductorviewService;
-
 
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un socio tipo productor por numero de cedula", response = ProductorView.class)
@@ -69,7 +67,7 @@ public class SocioTipoProductorViewController implements ErrorController {
 		LOGGER.info("Socio Tipos Productores findByUbiId: " + personas.toString());
 		return personas;
 	}
-	
+
 	@RequestMapping(value = "/findOrgByPetiId/{petiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca las organizaciones del petiId", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
@@ -78,11 +76,9 @@ public class SocioTipoProductorViewController implements ErrorController {
 		LOGGER.info("Socio Tipo Productores findByPetiId: " + proorgs.toString());
 		return proorgs;
 	}
-	
 
 	@Override
 	public String getErrorPath() {
 		return PATH;
 	}
 }
-

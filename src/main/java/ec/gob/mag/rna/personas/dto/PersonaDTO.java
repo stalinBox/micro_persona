@@ -1,7 +1,6 @@
 package ec.gob.mag.rna.personas.dto;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -352,7 +351,7 @@ public class PersonaDTO implements Serializable {
 	@JsonProperty("personaTipos")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-persona-tipos")
-	private List<PersonaTipoDTO> personaTipos = new ArrayList<PersonaTipoDTO>();
+	private List<PersonaTipoDTO> personaTipos;
 
 	@PrePersist
 	public void prePersist() {

@@ -150,10 +150,9 @@ public class ProductorService {
 	 * @param Persona persona
 	 * @return Persona, nuevo objeto creado.
 	 */
+	@SuppressWarnings("unused")
 	public PersonaDTO saveProductor(PersonaDTO persona) {
 		List<PersonaTipoDTO> personaTipos = persona.getPersonaTipos();
-		List<ProductorDTO> productor = null;
-
 		if (personaTipos == null || personaTipos.size() > 1)
 			throw new MyNotFoundException(String.format(
 					messageSource.getMessage("error.tipop_not_specify.message=", null, LocaleContextHolder.getLocale()),
@@ -166,7 +165,6 @@ public class ProductorService {
 					null, LocaleContextHolder.getLocale()), Persona.class));
 		ProductorDTO prod = new ProductorDTO();
 		prod = pt.getProductor().get(0);
-
 		if (pt.getCatTipoPer() != 46)
 			throw new MyNotFoundException(String.format(
 					messageSource.getMessage("error.catalogo_not_equal.message", null, LocaleContextHolder.getLocale()),

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.PersonaTipo;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
-import ec.gob.mag.rna.personas.domain.view.SocioTipoProductorView;
 
 public class Util {
 
@@ -49,23 +48,6 @@ public class Util {
 		}
 		return password;
 	}
-//	public static String encryptMD5(String password) {
-//		MessageDigest md;
-//		try {
-//			md = MessageDigest.getInstance("MD5");
-//			md.update(password.getBytes());
-//			    byte[] digest = md.digest();
-//			    return DatatypeConverter
-//			      .printHexBinary(digest).toUpperCase();
-//		} catch (NoSuchAlgorithmException e) {
-//			e.printStackTrace();
-//		}
-//		return null;
-//	   
-//	}
-//	public static String generatePassword(int numberCharacteres) {
-//		return Util.encryptMD5( generateStringRandom(numberCharacteres) );
-//	}
 
 	public static Date dateNow() {
 		Date dateIn = new Date();
@@ -95,8 +77,6 @@ public class Util {
 			persona.setPerTipoContrSri(productor.getPerTipoContrSri());
 			persona.setUbiIdDomicilio(productor.getUbiIdDomicilio());
 			persona.setTipoProductor(productor.getTipoProductor());
-			// persona.setCatInstruccionAnio(null);
-			// persona.setCatEtniaOtra(null);
 			List<PersonaTipo> personasTipo = new ArrayList<>();
 			PersonaTipo personaTipo = new PersonaTipo();
 			personaTipo.setId(productor.getPetiId());
@@ -108,36 +88,6 @@ public class Util {
 		return persona;
 	}
 
-	/*public static Persona parseSocioToPersona(SocioTipoProductorView socio) {
-		if (socio == null)
-			return null;
-		Persona persona = new Persona();
-		if (socio != null) {
-			persona.setId(socio.getPetiId());
-			persona.setPerActFecha(socio.getPerActFecha());
-			persona.setPerApellido(socio.getPerApellido());
-			persona.setPerCedula(socio.getPerCedula());
-			persona.setPerCelular(socio.getPerCelular());
-			persona.setPerCorreo(socio.getPerCorreo());
-			persona.setPerDirDomicilio(socio.getPerDirDomicilio());
-			persona.setPerFechaNac(socio.getPerFechaNac());
-			persona.setPerIdentificacion(socio.getPerIdentificacion());
-			persona.setPerLugarNacRc(socio.getPerLugarNacRc());
-			persona.setPerNombre(socio.getPerNombre());
-			persona.setPerNombres(socio.getPerNombres());
-			persona.setPerRegFecha(socio.getPerRegFecha());
-			persona.setPerTelefono(socio.getPerTelefono());
-			persona.setPerTipoContrSri(socio.getPerTipoContrSri());
-			persona.setUbiIdDomicilio(socio.getUbiId());
-			List<PersonaTipo> personasTipo = new ArrayList<>();
-			PersonaTipo personaTipo = new PersonaTipo();
-			personaTipo.setId(socio.getPetiId());
-			personasTipo.add(personaTipo);
-			persona.setPersonaTipos(personasTipo);
-		}
-		return persona;
-	}*/
-
 	public static List<Persona> parseToListPersona(List<ProductorView> productores) {
 		if (productores == null)
 			return null;
@@ -145,14 +95,6 @@ public class Util {
 			return parseToPersona(p);
 		}).collect(Collectors.toList());
 	}
-
-	/*public static List<Persona> parseSociosToListPersonas(List<SocioTipoProductorView> socios) {
-		if (socios == null)
-			return null;
-		return socios.stream().map(s -> {
-			return parseSocioToPersona(s);
-		}).collect(Collectors.toList());
-	}*/
 
 	public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
 		Map<Object, Boolean> map = new ConcurrentHashMap<>();

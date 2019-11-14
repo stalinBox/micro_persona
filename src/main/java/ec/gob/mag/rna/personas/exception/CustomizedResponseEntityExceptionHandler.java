@@ -5,16 +5,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 import javax.transaction.RollbackException;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -87,6 +84,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		return new ResponseEntity(exResponse, status);
 	}
 
+	@SuppressWarnings("unchecked")
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllException(Exception ex, WebRequest request) {
 		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
@@ -98,16 +96,19 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		return buildException(ex, HttpStatus.NOT_FOUND, null, null, null, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@ExceptionHandler(MyInternalException.class)
 	public final ResponseEntity<Object> handleMyInternalException(Exception ex, WebRequest request) {
 		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@ExceptionHandler(CmNotFoundException.class)
 	public final ResponseEntity<Object> handleNotFoundException(Exception ex, WebRequest request) {
 		return buildException(ex, HttpStatus.NOT_FOUND, null, null, null, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	@ExceptionHandler(MyBadRequestException.class)
 	public final ResponseEntity<Object> handleBadRequestException(Exception ex, WebRequest request) {
 		return buildException(ex, HttpStatus.BAD_REQUEST, null, null, null, null);
@@ -131,20 +132,10 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
 	@ExceptionHandler(TransactionSystemException.class)
 	protected ResponseEntity<Object> handleConflict(TransactionSystemException ex, WebRequest request) {
-		LOGGER.error("Caught", ex);
-		Throwable cause = ex.getRootCause();
-
-		if (cause instanceof ConstraintViolationException) {
-			Set<ConstraintViolation<?>> constraintViolations = ((ConstraintViolationException) cause)
-					.getConstraintViolations();
-			// iterate the violations to create your JSON user friendly message
-			String msg = "pRUEBA";
-			return handleExceptionInternal(ex, msg, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-		}
 		return null;
-
 	}
 
+	@SuppressWarnings("unchecked")
 	@ExceptionHandler(NoSuchElementException.class)
 	public final ResponseEntity<Object> handleNoSuchElementException(Exception ex, WebRequest request) {
 		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.entity_not_exist_find_array.message", null,
@@ -165,7 +156,6 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	ResponseEntity<Object> handleNotAuthenticated(RuntimeException ex, WebRequest request) {
 		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, "error.constraint_validation.message", null, null,
 				null);
-
 	}
 
 	@SuppressWarnings("unchecked")
@@ -174,7 +164,6 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		return buildException(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, null, null);
 
 	}
-	//
 
 	@SuppressWarnings("unchecked")
 	@ExceptionHandler(InternalError.class)
@@ -189,14 +178,13 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		BindingResult result = ex.getBindingResult();
 		List<FieldError> fieldErrors = result.getFieldErrors();
-		StringBuilder errorMessage = new StringBuilder();
-
 		String messageDetail = "error:{";
 
 		int sizeFieldError = fieldErrors.size();
@@ -211,7 +199,6 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 				String msg = msgArr[0];
 				if (msgList.get(0).startsWith("_")) {
 					msg = messageSource.getMessage(msgList.get(0), null, LocaleContextHolder.getLocale());
-					StringBuilder errorMessageR = new StringBuilder();
 					msgList = new ArrayList(Arrays.asList(msg.split("%s")));
 					msg = "";
 					int k = 0;

@@ -5,45 +5,39 @@ import java.util.Date;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.data.annotation.Id;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.extern.log4j.Log4j;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Log4j
 public class MyLog {
 	@ApiModelProperty(value = "Nombre del proyecto")
 	private String proyecto;
-	
+
 	@ApiModelProperty(value = "Nombre del la clase")
 	private String clase;
-	
+
 	@ApiModelProperty(value = "Excepcion")
 	private String excepcion;
-	
+
 	@ApiModelProperty(value = "Codigo de Excepcion")
 	private String codigoExcepcion;
-	
-	
+
 	@ApiModelProperty(value = "Tipo de Excepcion")
 	private String tipoExcepcion;
-	
+
 	@ApiModelProperty(value = "stack de Excepcion")
 	private String stack;
-	
-    @ApiModelProperty(value = "Este campo almacena la fecha en la que se produjo la excepcion")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
+
+	@ApiModelProperty(value = "Este campo almacena la fecha en la que se produjo la excepcion")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fecha;
 
 }

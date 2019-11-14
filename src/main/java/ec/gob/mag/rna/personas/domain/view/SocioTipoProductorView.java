@@ -1,7 +1,6 @@
 package ec.gob.mag.rna.personas.domain.view;
 
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 
@@ -23,13 +22,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 //============== LOMBOK =============
 @Getter
 @Setter
-@ToString(of = "id")
-//@EqualsAndHashCode(of="id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

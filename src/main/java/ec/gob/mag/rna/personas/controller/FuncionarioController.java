@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +44,7 @@ public class FuncionarioController implements ErrorController {
 	@Autowired
 	@Qualifier("funcionarioService")
 	private FuncionarioService funcionarioService;
-	
+
 	@Autowired
 	private MessageSource messageSource;
 
@@ -90,38 +89,33 @@ public class FuncionarioController implements ErrorController {
 
 	@RequestMapping(value = "/findByPerIdAndProyIdAndTpefId/{perId}/{proyId}/{tpefId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Funcionarios por Id de persona, Id del proyecto y perfil de usuario", response = FuncionarioView.class)
-	//@ResponseStatus(HttpStatus.OK)
+	// @ResponseStatus(HttpStatus.OK)
 	public List<FuncionarioView> findByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
 			@PathVariable Long tpefId) {
 		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
-		//perfil adinistrador 18
-		if (tpefId.equals(new Long(18)) && perId.equals(new Long(0)))
-		{
+		// perfil adinistrador 18
+		if (tpefId.equals(new Long(18)) && perId.equals(new Long(0))) {
 			funcionarios = funcionarioService.findByProyIdAndTpefId(proyId, new Long(16));
-		}
-		else
-		{
+		} else {
 			// devuelve el registro de la persona en la vista
 			FuncionarioView fu = funcionarioService.findByPerIdAndProyIdAndTpefId(perId, proyId, tpefId);
 			// consulta los registros hijos
 			if (tpefId.equals(new Long(13))) {
-				funcionarios = funcionarioService.findByUpsIdPadreAndProyIdAndTpefId(fu.getUpsId(), proyId, new Long(5));
+				funcionarios = funcionarioService.findByUpsIdPadreAndProyIdAndTpefId(fu.getUpsId(), proyId,
+						new Long(5));
 			} else if (tpefId.equals(new Long(16))) {
-				funcionarios = funcionarioService.findByUpsIdPadreAndProyIdAndTpefId(fu.getUpsId(), proyId, new Long(13));
-			}			
+				funcionarios = funcionarioService.findByUpsIdPadreAndProyIdAndTpefId(fu.getUpsId(), proyId,
+						new Long(13));
+			}
 		}
-		
-		if (funcionarios == null || funcionarios.size()==0) {
-			String msg= MyExceptionUtility.buildExceptionJsonString
-					( "error.entity_not_exist.message", 
-							proyId.toString(), 
-					  this.getClass(),
-					  "findByUpsIdPadreAndProyIdAndTpefId",
-					  EnumTypeExceptions.INFO,
-					  EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
+
+		if (funcionarios == null || funcionarios.size() == 0) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
+					proyId.toString(), this.getClass(), "findByUpsIdPadreAndProyIdAndTpefId", EnumTypeExceptions.INFO,
+					EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
 			throw new MyNotFoundException(msg);
 		}
-		
+
 		LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefId: " + funcionarios.toString());
 		return funcionarios;
 	}

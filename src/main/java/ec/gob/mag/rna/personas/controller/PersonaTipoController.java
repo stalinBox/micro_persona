@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,9 +39,6 @@ public class PersonaTipoController implements ErrorController {
 	@Autowired
 	@Qualifier("personaTipoService")
 	private PersonaTipoService personaTipoService;
-
-	@Autowired
-	private MessageSource messageSource;
 
 	@RequestMapping(value = "/findByListId/{petiIds}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca PersonaTipos tipos por Ids", response = PersonaTipo.class)

@@ -1,12 +1,10 @@
 package ec.gob.mag.rna.personas.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.source.InvalidConfigurationPropertyValueException;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +18,6 @@ import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.sp.ProcedureProductor;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.PersonaDTO;
-import ec.gob.mag.rna.personas.dto.PersonaTipoDTO;
-import ec.gob.mag.rna.personas.dto.ProductorDTO;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
 import ec.gob.mag.rna.personas.services.ProductorService;
