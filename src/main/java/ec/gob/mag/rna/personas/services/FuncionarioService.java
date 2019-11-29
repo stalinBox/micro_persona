@@ -1,6 +1,9 @@
 package ec.gob.mag.rna.personas.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -9,9 +12,18 @@ import org.springframework.stereotype.Service;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
 import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.domain.view.FuncionarioView;
+import ec.gob.mag.rna.personas.dto.PerfilDTO;
+import ec.gob.mag.rna.personas.dto.ProyectoDTO;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
 import ec.gob.mag.rna.personas.repository.FuncionarioRepository;
 import ec.gob.mag.rna.personas.util.MyExceptionUtility;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 
 /**
@@ -28,6 +40,12 @@ public class FuncionarioService {
 	@Autowired
 	private MessageSource messageSource;
 
+	
+	public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor)
+    {
+        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
 	
 	/**
 	 * Devulve el listado de todos los funcionarios
@@ -93,7 +111,7 @@ public class FuncionarioService {
 					  EnumTypeExceptions.INFO,
 					  EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
 			throw new MyNotFoundException(msg);		}	
-		return tfcs.get(0);
+		return (FuncionarioView)tfcs.get(0);
 	}
 	
 	
@@ -192,5 +210,55 @@ public class FuncionarioService {
 		
 		}	
 		return tfcs;
+	}
+	
+
+	public List<ProyectoDTO> findProyByPerId(Long perId) {
+		List<FuncionarioView> tfcs = funcionarioRepository.findByPerId(perId);
+		if (tfcs == null || tfcs.size()==0) {
+			String msg= MyExceptionUtility.buildExceptionJsonString
+					( "error.entity_not_exist.message", 
+							perId.toString(), 
+					  this.getClass(),
+					  "findByPerId",
+					  EnumTypeExceptions.INFO,
+					  EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
+			throw new MyNotFoundException(msg);
+		
+		}	
+		
+		List<ProyectoDTO> proyectos= new ArrayList<ProyectoDTO>();
+		List<PerfilDTO> perfiles= new ArrayList<PerfilDTO>();
+	
+		tfcs.stream().map(t ->{
+			ProyectoDTO p= new ProyectoDTO();
+			p.setPerId(t.getPerId());
+			p.setProyId(t.getProyId());
+			p.setProyAbreviatura(t.getProyAbreviatura());
+			p.setProyNombre(t.getProyNombre());
+			proyectos.add(p);
+			
+			PerfilDTO per= new PerfilDTO();
+			per.setProyId(t.getProyId());
+			per.setTpefId(t.getTpefId());
+			per.setTpefNombre(t.getTpefNombre());
+			perfiles.add(per);
+			
+			return t;
+		}).collect(Collectors.toList());	
+		
+		//distinct proyecto iguales
+		List<ProyectoDTO> dproyectos= proyectos.stream().filter( distinctByKey(p -> p.getProyId())).collect(Collectors.toList());	
+				
+		dproyectos.stream().map(pr ->{			
+			perfiles.stream().map(perf ->{
+				if (pr.getProyId().equals(perf.getProyId()))
+					pr.getPerfiles().add(perf);
+				return perf;
+			}).collect(Collectors.toList());
+			return pr;
+		}).collect(Collectors.toList());	
+		
+		return dproyectos;
 	}
 }

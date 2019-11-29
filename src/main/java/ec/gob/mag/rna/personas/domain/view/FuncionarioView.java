@@ -149,5 +149,24 @@ public class FuncionarioView implements java.io.Serializable {
 	@JsonProperty("ubiId")
 	@JsonInclude(Include.NON_NULL)
 	private Long ubiId;
+	
+	@ApiModelProperty(value = "Nombre del proyecto al que pertenece la persona")
+	@Column(name = "proy_nombre", length=200)
+	@JsonProperty("proyNombre")
+	@JsonInclude(Include.NON_NULL)
+	private String proyNombre;	
+	
+	@ApiModelProperty(value = "Abreviatura del proyecto al que pertenece la persona")
+	@Column(name = "proy_abreviatura", length=15)
+	@JsonProperty("proyAbreviatura")
+	@JsonInclude(Include.NON_NULL)
+	private String proyAbreviatura;
+	
+	@ApiModelProperty(value = "Nombre Perfil Persona")
+	@Column(name = "tpef_nombre", length=100)
+	@JsonProperty("tpefNombre")
+	@JsonInclude(Include.NON_NULL)
+	private String tpefNombre;
+	
 
 }

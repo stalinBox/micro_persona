@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ec.gob.mag.rna.personas.domain.view.FuncionarioView;
+import ec.gob.mag.rna.personas.dto.ProyectoDTO;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
 import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
@@ -174,5 +175,15 @@ public class FuncionarioController implements ErrorController {
 	public String getErrorPath() {
 		// TODO Auto-generated method stub
 		return PATH;
+	}
+	
+	@RequestMapping(value = "/findProyByPerId/{perId}", method = RequestMethod.GET)
+	@ApiOperation(value = "Busca proyectos y perfiles de usuario", response = ProyectoDTO.class)
+	@ResponseStatus(HttpStatus.OK)
+	public List<ProyectoDTO> findByPerId(@PathVariable Long perId) {
+		// devuelve el registro de la persona en la vista
+		List<ProyectoDTO> lista = funcionarioService.findProyByPerId(perId);
+		LOGGER.info("Proyectos por Funcionario: " + lista.toString());
+		return lista;
 	}
 }

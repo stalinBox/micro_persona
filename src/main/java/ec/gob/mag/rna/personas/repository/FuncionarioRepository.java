@@ -21,4 +21,9 @@ public interface FuncionarioRepository extends CrudRepository<FuncionarioView, L
 	List<FuncionarioView> findByPerIdAndProyIdAndTpefId(Long perId, Long proyId, Long tpefId);
 
 	List<FuncionarioView> findByProyIdAndTpefId(Long proyId, Long tpefId);
+	
+	List<FuncionarioView> findByPerId(Long perId);
+	
+	List<FuncionarioView> findByPerIdAndProyId(Long perId, Long proyId);
 }
+
