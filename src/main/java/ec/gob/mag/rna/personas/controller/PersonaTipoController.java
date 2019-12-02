@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,7 +44,8 @@ public class PersonaTipoController implements ErrorController {
 	@RequestMapping(value = "/findByListId/{petiIds}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca PersonaTipos tipos por Ids", response = PersonaTipo.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<PersonaTipo> getProductorByCedula(@Valid @RequestBody List<ArrayIdRequest> ids) {
+	public List<PersonaTipo> getProductorByCedula(@Valid @RequestBody List<ArrayIdRequest> ids,
+			@RequestHeader(name = "Authorization") String token) {
 		List<PersonaTipo> personas = null;
 		personas = personaTipoService.findByListId(ids);
 		LOGGER.info("PersonaTipo findByListId: " + personas.toString());
@@ -53,7 +55,8 @@ public class PersonaTipoController implements ErrorController {
 	@RequestMapping(value = "/findByPerId/{perId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca PersonaTipo por PerId", response = PersonaTipo.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<PersonaTipo> findPersonaTipoByPerId(@Valid @PathVariable Long perId) {
+	public List<PersonaTipo> findPersonaTipoByPerId(@Valid @PathVariable Long perId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<PersonaTipo> personas = new ArrayList<PersonaTipo>();
 		personas = personaTipoService.findPersonaTipoByPerId(perId);
 		LOGGER.info("PersonaTipos findByPerId: " + personas.toString());
@@ -63,7 +66,8 @@ public class PersonaTipoController implements ErrorController {
 	@RequestMapping(value = "/findByAreaId/{areaId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca PersonaTipo por Area ID", response = PersonaTipo.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<PersonaTipo> findByAreaId(@Valid @PathVariable Long areaId) {
+	public List<PersonaTipo> findByAreaId(@Valid @PathVariable Long areaId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<PersonaTipo> personas = new ArrayList<PersonaTipo>();
 		personas = personaTipoService.findByAreaId(areaId);
 		LOGGER.info("PersonaTipos findByPerId: " + personas.toString());

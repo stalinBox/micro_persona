@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -44,7 +45,8 @@ public class SocioTipoProductorViewController implements ErrorController {
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un socio tipo productor por numero de cedula", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona getProductorByCedula(@Valid @PathVariable String cedula) {
+	public Persona getProductorByCedula(@Valid @PathVariable String cedula,
+			@RequestHeader(name = "Authorization") String token) {
 		Persona persona = sociotipoproductorviewService.findProductorByIdentificacion(cedula);
 		LOGGER.info("Socio Tipo Productor findByCedula: " + persona.toString());
 		return persona;
@@ -53,7 +55,8 @@ public class SocioTipoProductorViewController implements ErrorController {
 	@RequestMapping(value = "/findByOrgId/{orgId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca socios tipo productores por Id de la Organizacion", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId) {
+	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = sociotipoproductorviewService.findByOrgId(orgId);
 		LOGGER.info("Socio Tipo Productores findByOrgId: " + personas.toString());
 		return personas;
@@ -62,7 +65,8 @@ public class SocioTipoProductorViewController implements ErrorController {
 	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca socios tipo productores por Id de la Ubicacion", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId) {
+	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = sociotipoproductorviewService.findByUbiId(ubiId);
 		LOGGER.info("Socio Tipos Productores findByUbiId: " + personas.toString());
 		return personas;
@@ -71,7 +75,8 @@ public class SocioTipoProductorViewController implements ErrorController {
 	@RequestMapping(value = "/findOrgByPetiId/{petiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca las organizaciones del petiId", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProductorOrganizacionDTO> findOrgByPetiId(@Valid @PathVariable Long petiId) {
+	public List<ProductorOrganizacionDTO> findOrgByPetiId(@Valid @PathVariable Long petiId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<ProductorOrganizacionDTO> proorgs = sociotipoproductorviewService.findByPetiId(petiId);
 		LOGGER.info("Socio Tipo Productores findByPetiId: " + proorgs.toString());
 		return proorgs;

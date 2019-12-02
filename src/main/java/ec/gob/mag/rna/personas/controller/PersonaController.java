@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,7 +49,8 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por número de cédula", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona getPersonaByCedula(@Valid @PathVariable String cedula) {
+	public Persona getPersonaByCedula(@Valid @PathVariable String cedula,
+			@RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.findByPerIdentificacion(cedula);
 		LOGGER.info("Persona findByCedula: " + persona.toString());
 		return persona;
@@ -59,7 +61,7 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por Id", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona getPersonaById(@Valid @PathVariable Long id) {
+	public Persona getPersonaById(@Valid @PathVariable Long id, @RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.findById(id);
 		LOGGER.info("Persona findById: " + persona.toString());
 		return persona;
@@ -69,7 +71,7 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findByPesonaTipoId/{petiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por Persona Tipo Id", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona findByPerId(@Valid @PathVariable Long petiId) {
+	public Persona findByPerId(@Valid @PathVariable Long petiId, @RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.PesonaTipoId(petiId);
 		LOGGER.info("Persona findByPesonaTipoId: " + persona.toString());
 		return persona;
@@ -78,7 +80,8 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findByTipo/{tipo}/{hoja}/{items}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca personas por Tipo. Devuelve paginado", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> findByTipo(@PathVariable Long tipo, @PathVariable Integer hoja, @PathVariable Integer items) {
+	public List<Persona> findByTipo(@PathVariable Long tipo, @PathVariable Integer hoja, @PathVariable Integer items,
+			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = personaService.findByTipo(tipo, hoja, items);
 		LOGGER.info("Personas findByTipo: " + personas.toString());
 		return personas;
@@ -88,7 +91,8 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findByCedulaAndTipo/{cedula}/{tipo}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un persona por número de cédula y Tipo", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona findByCedulaAndTipo(@PathVariable String cedula, @PathVariable Long tipo) {
+	public Persona findByCedulaAndTipo(@PathVariable String cedula, @PathVariable Long tipo,
+			@RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.findByPerIdentificacionAndTipo(cedula, tipo);
 		LOGGER.info("Persona findByCedulaAndTipo: " + persona.toString());
 		return persona;
@@ -99,7 +103,7 @@ public class PersonaController implements ErrorController {
 	@ApiOperation(value = "Busca persona por tipo y areas", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
 	public List<Persona> findAllByAreasAndTipo(@RequestParam(value = "areaIds", required = false) List<Long> areaIds,
-			@PathVariable Integer tipo) {
+			@PathVariable Integer tipo, @RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = personaService.findByTipoAndAreasIn(tipo, areaIds);
 		LOGGER.info("Persona findAllByAreasAndTipo: " + personas.toString());
 		return personas;
@@ -109,7 +113,8 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea una nueva persona", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseUpdate createPersona(@Valid @RequestBody Persona persona) {
+	public ResponseUpdate createPersona(@Valid @RequestBody Persona persona,
+			@RequestHeader(name = "Authorization") String token) {
 		Persona personaResponse = personaService.savePersona(persona);
 		LOGGER.info("Persona Create: " + personaResponse.toString());
 		return new ResponseUpdate("persona", personaResponse.getId());

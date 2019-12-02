@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -51,7 +52,8 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseUpdate createProductor(@Valid @RequestBody PersonaDTO productor) {
+	public ResponseUpdate createProductor(@Valid @RequestBody PersonaDTO productor,
+			@RequestHeader(name = "Authorization") String token) {
 		PersonaDTO productorResponse = productorService.saveProductor(productor);
 		LOGGER.info("Productor Create: " + productorResponse.toString());
 		return new ResponseUpdate("productor", productorResponse.getId());
@@ -60,7 +62,8 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseUpdate updateProductor(@Valid @RequestBody PersonaDTO productor) {
+	public ResponseUpdate updateProductor(@Valid @RequestBody PersonaDTO productor,
+			@RequestHeader(name = "Authorization") String token) {
 		PersonaDTO productorResponse = productorService.saveProductor(productor);
 		LOGGER.info("Productor update: " + productorResponse.toString());
 		return new ResponseUpdate("productor", productorResponse.getId());
@@ -70,7 +73,8 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/findByCedulaProductor/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por numero de cedula", response = ProcedureProductor.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProcedureProductor> getSPProductorByCedula(@Valid @PathVariable String cedula) {
+	public List<ProcedureProductor> getSPProductorByCedula(@Valid @PathVariable String cedula,
+			@RequestHeader(name = "Authorization") String token) {
 		System.out.println("=====> CEDULA: " + cedula);
 		List<ProcedureProductor> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
 		LOGGER.info("Productor findByCedula: " + procedureProductor.toString());
@@ -83,7 +87,8 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor por numero de cedula", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona getProductorByCedula(@Valid @PathVariable String cedula) {
+	public Persona getProductorByCedula(@Valid @PathVariable String cedula,
+			@RequestHeader(name = "Authorization") String token) {
 		Persona persona = productorService.findProductorByIdentificacion(cedula);
 		LOGGER.info("Productor findByCedula: " + persona.toString());
 		return persona;
@@ -92,7 +97,7 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor por Id", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona getProductorById(@Valid @PathVariable Long id) {
+	public Persona getProductorById(@Valid @PathVariable Long id, @RequestHeader(name = "Authorization") String token) {
 		Persona persona = productorService.findProductorById(id);
 		LOGGER.info("Productor findById: " + persona.toString());
 		return persona;
@@ -101,7 +106,8 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/findByOrgId/{orgId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca productores por Id de la Organizacion", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId) {
+	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = productorService.findByOrgId(orgId);
 		LOGGER.info("Productores findByOrgId: " + personas.toString());
 		return personas;
@@ -110,7 +116,8 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId) {
+	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = productorService.findProductorByUbiIdDomicilio(ubiId);
 		LOGGER.info("Productores findByUbiId: " + personas.toString());
 		return personas;

@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -52,7 +53,7 @@ public class FuncionarioController implements ErrorController {
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET)
 	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<FuncionarioView> findAll() {
+	public List<FuncionarioView> findAll(@RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findAll();
 		LOGGER.info("Funcionarios findAll: " + funcionarios.toString());
@@ -62,7 +63,7 @@ public class FuncionarioController implements ErrorController {
 	@RequestMapping(value = "/findDistinctAll", method = RequestMethod.GET)
 	@ApiOperation(value = "Devuelve el listado de todos los funcionarios haciendo distinción por Id", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<FuncionarioView> findDistinctAll() {
+	public List<FuncionarioView> findDistinctAll(@RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findAll();
 		funcionarios = funcionarios.stream().filter(Util.distinctByKey(f -> f.getPerId())).collect(Collectors.toList());
@@ -73,7 +74,7 @@ public class FuncionarioController implements ErrorController {
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un funcionario por numero de id", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public FuncionarioView findById(@PathVariable Long id) {
+	public FuncionarioView findById(@PathVariable Long id, @RequestHeader(name = "Authorization") String token) {
 		FuncionarioView funcionario = funcionarioService.findById(id);
 		LOGGER.info("Funcionario findById: " + funcionario.toString());
 		return funcionario;
@@ -82,7 +83,8 @@ public class FuncionarioController implements ErrorController {
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un funcionario por numero de cedula", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public FuncionarioView findByCedula(@PathVariable String cedula) {
+	public FuncionarioView findByCedula(@PathVariable String cedula,
+			@RequestHeader(name = "Authorization") String token) {
 		FuncionarioView funcionario = funcionarioService.findByPerIdentificacion(cedula);
 		LOGGER.info("Funcionario findByCedula: " + funcionario.toString());
 		return funcionario;
@@ -92,7 +94,7 @@ public class FuncionarioController implements ErrorController {
 	@ApiOperation(value = "Funcionarios por Id de persona, Id del proyecto y perfil de usuario", response = FuncionarioView.class)
 	// @ResponseStatus(HttpStatus.OK)
 	public List<FuncionarioView> findByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
-			@PathVariable Long tpefId) {
+			@PathVariable Long tpefId, @RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
 		// perfil adinistrador 18
 		if (tpefId.equals(new Long(18)) && perId.equals(new Long(0))) {
@@ -124,7 +126,8 @@ public class FuncionarioController implements ErrorController {
 	@RequestMapping(value = "/findByProyIdAndTpefId/{proyId}/{tpefId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Funcionarios por Id del proyecto y perfil de usuario", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<FuncionarioView> findByProyIdAndTpefId(@PathVariable Long proyId, @PathVariable Long tpefId) {
+	public List<FuncionarioView> findByProyIdAndTpefId(@PathVariable Long proyId, @PathVariable Long tpefId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findByProyIdAndTpefId(proyId, tpefId);
 		LOGGER.info("Funcionarios findByProyIdAndTpefId: " + funcionarios.toString());
@@ -134,7 +137,8 @@ public class FuncionarioController implements ErrorController {
 	@RequestMapping(value = "/findDistinctByProyIdAndTpefId/{proyId}/{tpefId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca funcionarios por Id del proyecto y perfil de usuario. Eliminando registros repetidos", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<FuncionarioView> findDistinctByProyIdAndTpefId(@PathVariable Long proyId, @PathVariable Long tpefId) {
+	public List<FuncionarioView> findDistinctByProyIdAndTpefId(@PathVariable Long proyId, @PathVariable Long tpefId,
+			@RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findByProyIdAndTpefId(proyId, tpefId);
 		funcionarios = funcionarios.stream().filter(Util.distinctByKey(f -> f.getPerId())).collect(Collectors.toList());
@@ -146,7 +150,7 @@ public class FuncionarioController implements ErrorController {
 	@ApiOperation(value = "Busca un funcionario por id de persona, id del proyecto y perfil de usuario", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
 	public FuncionarioView findPadreByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
-			@PathVariable Long tpefId) {
+			@PathVariable Long tpefId, @RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
 		// devuelve el registro de la persona en la vista
 		FuncionarioView pfu = funcionarioService.findByPerIdAndProyIdAndTpefId(perId, proyId, tpefId);
@@ -164,7 +168,7 @@ public class FuncionarioController implements ErrorController {
 	@ApiOperation(value = "Busca funcionarios por id de padre, id del proyecto y perfil de usuario", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
 	public List<FuncionarioView> findByUpsIdPadreAndProyIdAndTpefId(@PathVariable Long upsIdPadre,
-			@PathVariable Long proyId, @PathVariable Long tpefId) {
+			@PathVariable Long proyId, @PathVariable Long tpefId, @RequestHeader(name = "Authorization") String token) {
 		// devuelve el registro de la persona en la vista
 		List<FuncionarioView> lista = funcionarioService.findByUpsIdPadreAndProyIdAndTpefId(upsIdPadre, proyId, tpefId);
 		LOGGER.info("Funcionarios findByUpsIdPadreAndProyIdAndTpefId: " + lista.toString());
@@ -176,11 +180,12 @@ public class FuncionarioController implements ErrorController {
 		// TODO Auto-generated method stub
 		return PATH;
 	}
-	
+
 	@RequestMapping(value = "/findProyByPerId/{perId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca proyectos y perfiles de usuario", response = ProyectoDTO.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProyectoDTO> findByPerId(@PathVariable Long perId) {
+	public List<ProyectoDTO> findByPerId(@PathVariable Long perId,
+			@RequestHeader(name = "Authorization") String token) {
 		// devuelve el registro de la persona en la vista
 		List<ProyectoDTO> lista = funcionarioService.findProyByPerId(perId);
 		LOGGER.info("Proyectos por Funcionario: " + lista.toString());
