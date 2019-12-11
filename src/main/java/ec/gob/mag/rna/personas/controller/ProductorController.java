@@ -82,7 +82,7 @@ public class ProductorController implements ErrorController {
 
 	/*********** PRODUCTOR párametro per_id ***********/
 
-	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/findById/{perId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por perId", response = ProcedureProductor.class)
 	@ResponseStatus(HttpStatus.OK)
 	public List<ProcedureProductor> getSPProductorByPerId(@Valid @PathVariable Long perId,
