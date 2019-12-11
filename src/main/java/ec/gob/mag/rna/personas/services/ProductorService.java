@@ -57,8 +57,19 @@ public class ProductorService {
 		return productor;
 	}
 
+	public List<ProcedureProductor> findByperId(Long perId) {
+		List<ProcedureProductor> productor = productorSPRepository.findByperId(perId);
+		if (productor == null || productor.size() == 0) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", perId.toString(),
+					this.getClass(), "findByperId", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
+					messageSource);
+			throw new MyNotFoundException(msg);
+		}
+		return productor;
+	}
+
 	/**
-	 * Buscar productor por cédula
+	 * Buscar productor por cédula HECHO POR PAUL
 	 *
 	 * @param String identificacion
 	 * @return Persona, si cumple la condición. Exception, si no cumple.
@@ -90,25 +101,6 @@ public class ProductorService {
 		}
 		return Util.parseToListPersona(productores);
 	}
-
-	/**
-	 * Buscar socio productor por Id de Ubicación Domicilio. La busqueda se ejecuta
-	 * sobre una Vista.
-	 *
-	 * @param Long ubiId
-	 * @return List<Persona>, si cumple la condición. Exception, si no cumple.
-	 */
-	/*
-	 * public List<Persona> findSocioProductorByUbiIdDomicilio(Long ubiId) {
-	 * List<SocioTipoProductorView> socios =
-	 * sociotipoproductorRepository.findByUbiId(ubiId); if (socios == null ||
-	 * socios.size() == 0) { String msg =
-	 * MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
-	 * ubiId.toString(), this.getClass(), "findSocioProductorByUbiIdDomicilio",
-	 * EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
-	 * messageSource); throw new MyNotFoundException(msg); } return
-	 * Util.parseSociosToListPersonas(socios); }
-	 */
 
 	/**
 	 * Buscar productores por Organización Id.
@@ -163,6 +155,7 @@ public class ProductorService {
 		if (pt.getProductor() == null || pt.getProductor().size() > 1)
 			throw new MyNotFoundException(String.format(messageSource.getMessage("error.productor_not_specify.message",
 					null, LocaleContextHolder.getLocale()), Persona.class));
+
 		ProductorDTO prod = new ProductorDTO();
 		prod = pt.getProductor().get(0);
 		if (pt.getCatTipoPer() != 46)
