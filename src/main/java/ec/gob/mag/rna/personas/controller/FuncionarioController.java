@@ -96,6 +96,7 @@ public class FuncionarioController implements ErrorController {
 	public List<FuncionarioView> findByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
 			@PathVariable Long tpefId, @RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
+		
 		// perfil adinistrador 18
 		if (tpefId.equals(new Long(18)) && perId.equals(new Long(0))) {
 			funcionarios = funcionarioService.findByProyIdAndTpefId(proyId, new Long(16));
@@ -112,12 +113,12 @@ public class FuncionarioController implements ErrorController {
 			}
 		}
 
-		if (funcionarios == null || funcionarios.size() == 0) {
+		/*if (funcionarios == null || funcionarios.size() == 0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
 					proyId.toString(), this.getClass(), "findByUpsIdPadreAndProyIdAndTpefId", EnumTypeExceptions.INFO,
 					EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
 			throw new MyNotFoundException(msg);
-		}
+		}*/
 
 		LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefId: " + funcionarios.toString());
 		return funcionarios;
