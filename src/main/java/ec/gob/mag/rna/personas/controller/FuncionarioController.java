@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,11 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ec.gob.mag.rna.personas.domain.view.FuncionarioView;
 import ec.gob.mag.rna.personas.dto.ProyectoDTO;
-import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
-import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
-import ec.gob.mag.rna.personas.exception.MyNotFoundException;
 import ec.gob.mag.rna.personas.services.FuncionarioService;
-import ec.gob.mag.rna.personas.util.MyExceptionUtility;
 import ec.gob.mag.rna.personas.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,9 +41,6 @@ public class FuncionarioController implements ErrorController {
 	@Autowired
 	@Qualifier("funcionarioService")
 	private FuncionarioService funcionarioService;
-
-	@Autowired
-	private MessageSource messageSource;
 
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET)
 	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionarioView.class)
@@ -96,7 +88,7 @@ public class FuncionarioController implements ErrorController {
 	public List<FuncionarioView> findByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
 			@PathVariable Long tpefId, @RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
-		
+
 		// perfil adinistrador 18
 		if (tpefId.equals(new Long(18)) && perId.equals(new Long(0))) {
 			funcionarios = funcionarioService.findByProyIdAndTpefId(proyId, new Long(16));
@@ -113,12 +105,13 @@ public class FuncionarioController implements ErrorController {
 			}
 		}
 
-		/*if (funcionarios == null || funcionarios.size() == 0) {
-			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
-					proyId.toString(), this.getClass(), "findByUpsIdPadreAndProyIdAndTpefId", EnumTypeExceptions.INFO,
-					EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
-			throw new MyNotFoundException(msg);
-		}*/
+		/*
+		 * if (funcionarios == null || funcionarios.size() == 0) { String msg =
+		 * MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
+		 * proyId.toString(), this.getClass(), "findByUpsIdPadreAndProyIdAndTpefId",
+		 * EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
+		 * messageSource); throw new MyNotFoundException(msg); }
+		 */
 
 		LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefId: " + funcionarios.toString());
 		return funcionarios;
