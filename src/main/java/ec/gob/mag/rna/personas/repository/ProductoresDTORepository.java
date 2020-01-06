@@ -11,7 +11,11 @@ import ec.gob.mag.rna.personas.dto.ProductoresDTO;
 @Repository("productoresDTORepository")
 public interface ProductoresDTORepository extends CrudRepository<ProductoresDTO, Long> {
 
-	@Query("select p, pt, pr, pred"
+	@Query("select new ec.gob.mag.rna.personas.dto.ProductoresDTO("
+			+ " p.id, p.perNombre, p.perApellido,"
+			+ " p.perNombres, p.perIdentificacion, p.perDirDomicilio,"
+			+ " pred.id, pred.ubiId, p.perTelefono," 
+			+" p.perCelular ,p.perCorreo , pt.id)" 
 			+" FROM PersonaDTO p" 
 			+" INNER JOIN PersonaTipoDTO pt ON p.id = pt.persona" 
 			+" JOIN ProductorDTO pr ON pt.id = pr.personaTipo" 
@@ -24,5 +28,7 @@ public interface ProductoresDTORepository extends CrudRepository<ProductoresDTO,
 			+" AND pred.preEliminado = false"
 			+" AND pred.ubiId = ?1")
 	List<ProductoresDTO> findByUbiId(Long ubiId);
+	
+	
 
 }
