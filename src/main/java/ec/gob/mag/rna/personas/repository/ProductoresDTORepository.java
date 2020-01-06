@@ -11,10 +11,7 @@ import ec.gob.mag.rna.personas.dto.ProductoresDTO;
 @Repository("productoresDTORepository")
 public interface ProductoresDTORepository extends CrudRepository<ProductoresDTO, Long> {
 
-	@Query("select distinct p.id as perId, p.perNombre as perNombre, p.perApellido as perApellido,"
-			+ " p.perNombres as perNombres, p.perIdentificacion as perIdentificacion, p.perDirDomicilio as perDirDomicilio,"
-			+ " pred.ubiId as ubiId, p.perTelefono as perTelefono," 
-			+" p.perCelular as perCelular,p.perCorreo as perCorreo, pt.id as petiId" 
+	@Query("select p, pt, pr, pred"
 			+" FROM PersonaDTO p" 
 			+" INNER JOIN PersonaTipoDTO pt ON p.id = pt.persona" 
 			+" JOIN ProductorDTO pr ON pt.id = pr.personaTipo" 

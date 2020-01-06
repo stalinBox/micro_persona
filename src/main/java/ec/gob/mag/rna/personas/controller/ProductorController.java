@@ -128,7 +128,7 @@ public class ProductorController implements ErrorController {
 	}
 
 	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductoresDTO.class,  produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductoresDTO.class)
 	@ResponseStatus(HttpStatus.OK)
 	public List<ProductoresDTO> getProductorByUbiId(@Valid @PathVariable Long ubiId,
 			@RequestHeader(name = "Authorization") String token) {

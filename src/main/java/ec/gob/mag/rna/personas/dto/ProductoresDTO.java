@@ -23,7 +23,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Entity
-
 public class ProductoresDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -27,7 +27,7 @@ import lombok.ToString;
 //============== LOMBOK =============
 @Getter
 @Setter
-@ToString(of = "preId")
+@ToString(of = "id")
 //@EqualsAndHashCode(of="preId")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,7 +38,7 @@ import lombok.ToString;
 public class PredioDTO implements java.io.Serializable {
 
 
-	private static final long serialVersionUID = -2631428883075299326L;
+	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla predio", position = 1)
 	@Id
@@ -48,7 +48,7 @@ public class PredioDTO implements java.io.Serializable {
 	private Long id;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla ubicacion", position = 2)
-	@Column(name = "ubi_id", unique = true, nullable = false)
+	@Column(name = "ubi_id")
 	@JsonProperty("ubiId")
 	@JsonInclude(Include.NON_NULL)
 	private Long ubiId;
