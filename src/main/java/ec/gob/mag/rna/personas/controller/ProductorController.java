@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,6 +20,7 @@ import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.sp.ProcedureProductor;
 import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.PersonaDTO;
+import ec.gob.mag.rna.personas.dto.ProductoresDTO;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
 import ec.gob.mag.rna.personas.services.ProductorService;
@@ -126,11 +128,11 @@ public class ProductorController implements ErrorController {
 	}
 
 	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductorView.class)
+	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductoresDTO.class,  produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
+	public List<ProductoresDTO> getProductorByUbiId(@Valid @PathVariable Long ubiId,
 			@RequestHeader(name = "Authorization") String token) {
-		List<Persona> personas = productorService.findProductorByUbiIdDomicilio(ubiId);
+		List<ProductoresDTO> personas = productorService.findProductorByUbiIdDomicilio(ubiId);
 		LOGGER.info("Productores findByUbiId: " + personas.toString());
 		return personas;
 	}

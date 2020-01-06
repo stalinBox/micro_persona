@@ -14,10 +14,12 @@ import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.PersonaDTO;
 import ec.gob.mag.rna.personas.dto.PersonaTipoDTO;
 import ec.gob.mag.rna.personas.dto.ProductorDTO;
+import ec.gob.mag.rna.personas.dto.ProductoresDTO;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
 import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
 import ec.gob.mag.rna.personas.repository.PersonaRepository;
+import ec.gob.mag.rna.personas.repository.ProductoresDTORepository;
 import ec.gob.mag.rna.personas.repository.ProductorSPRepositoy;
 import ec.gob.mag.rna.personas.repository.ProductorViewRepository;
 import ec.gob.mag.rna.personas.util.MyExceptionUtility;
@@ -42,7 +44,12 @@ public class ProductorService {
 	@Autowired
 	@Qualifier("productorSPRepository")
 	private ProductorSPRepositoy productorSPRepository;
-
+	
+	
+	@Autowired
+	@Qualifier("productoresDTORepository")
+	private ProductoresDTORepository productoresDTORepository;
+	
 	@Autowired
 	private MessageSource messageSource;
 
@@ -84,14 +91,10 @@ public class ProductorService {
 		}
 		return Util.parseToPersona(productor);
 	}
-
-	/**
-	 * Buscar productor por Id de Ubicación Domicilio
-	 *
-	 * @param Long ubiId
-	 * @return List<Persona>, si cumple la condición. Exception, si no cumple.
-	 */
-	public List<Persona> findProductorByUbiIdDomicilio(Long ubiId) {
+	
+	
+	/*
+	public List<Persona> findProductorByUbiIdDomicilioView(Long ubiId) {
 		List<ProductorView> productores = productorRepository.findByUbiIdDomicilio(ubiId);
 		if (productores == null || productores.size() == 0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", ubiId.toString(),
@@ -100,7 +103,7 @@ public class ProductorService {
 			throw new MyNotFoundException(msg);
 		}
 		return Util.parseToListPersona(productores);
-	}
+	}*/
 
 	/**
 	 * Buscar productores por Organización Id.
@@ -164,5 +167,24 @@ public class ProductorService {
 					Persona.class));
 		return personaRepository.save(persona);
 	}
-
+	
+	
+	
+	///metodo para buscar productores por ubicacion
+	/**
+	 * Buscar productor por Id de Ubicación Domicilio
+	 *
+	 * @param Long ubiId
+	 * @return List<ProductorResponseDTO>, si cumple la condición. Exception, si no cumple.
+	 */
+	public List<ProductoresDTO> findProductorByUbiIdDomicilio(Long ubiId) {
+		List<ProductoresDTO> produc = productoresDTORepository.findByUbiId(ubiId);
+		if (produc == null || produc.size() == 0) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", ubiId.toString(),
+					this.getClass(), "findProductorByUbiIdDomicilio", EnumTypeExceptions.INFO,
+					EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
+			throw new MyNotFoundException(msg);
+		}
+		return produc;
+	}
 }

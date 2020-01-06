@@ -3,6 +3,7 @@ package ec.gob.mag.rna.personas.dto;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -143,6 +144,13 @@ public class PersonaTipoDTO implements Serializable {
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-tipos-productor")
 	private List<ProductorDTO> productor;
+	
+	@ApiModelProperty(value = "Campo predio")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "personaTipo")
+	@JsonProperty("predios")
+	@JsonInclude(Include.NON_NULL)
+	@JsonManagedReference(value = "persona-tipos-predio")
+	private Set<PredioDTO> predios;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona")
 	@ManyToOne(fetch = FetchType.LAZY)
