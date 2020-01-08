@@ -19,7 +19,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Entity
-public class ProductoresDTO implements Serializable {
+public class ProductoresDTOPaginated implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -72,4 +72,5 @@ public class ProductoresDTO implements Serializable {
 	@JsonProperty("petiId")
 	private Long petiId;
 
+	private Integer totalRecords;
 }
