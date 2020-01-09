@@ -123,6 +123,7 @@ public class ProductorController implements ErrorController {
 		return personas;
 	}
 
+	/*************** ELIMINAR ***************/
 	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductorView.class)
 	@ResponseStatus(HttpStatus.OK)
