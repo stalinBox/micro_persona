@@ -123,6 +123,16 @@ public class ProductorController implements ErrorController {
 		return personas;
 	}
 
+	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
+	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductorView.class)
+	@ResponseStatus(HttpStatus.OK)
+	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
+			@RequestHeader(name = "Authorization") String token) {
+		List<Persona> personas = productorService.findProductorByUbiIdDomicilio(ubiId);
+		LOGGER.info("Productores findByUbiId: " + personas.toString());
+		return personas;
+	}
+
 	/************ PAGINACION PRODUCTOR parámetro id Ubicación *********/
 	/** UTILIZAR EN VEZ DE /findByUbiId/{ubiId} */
 	@SuppressWarnings("unchecked")

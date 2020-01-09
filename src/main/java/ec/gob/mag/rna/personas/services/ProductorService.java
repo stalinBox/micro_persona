@@ -147,4 +147,22 @@ public class ProductorService {
 					Persona.class));
 		return personaRepository.save(persona);
 	}
+
+	/** CAMBIAR/ ELIMINAR ***/
+	/**
+	 * Buscar productor por Id de Ubicación Domicilio
+	 *
+	 * @param Long ubiId
+	 * @return List<Persona>, si cumple la condición. Exception, si no cumple.
+	 */
+	public List<Persona> findProductorByUbiIdDomicilio(Long ubiId) {
+		List<ProductorView> productores = productorRepository.findByUbiIdDomicilio(ubiId);
+		if (productores == null || productores.size() == 0) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", ubiId.toString(),
+					this.getClass(), "findProductorByUbiIdDomicilio", EnumTypeExceptions.INFO,
+					EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
+			throw new MyNotFoundException(msg);
+		}
+		return Util.parseToListPersona(productores);
+	}
 }
