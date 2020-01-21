@@ -109,7 +109,7 @@ public class FuncionarioController implements ErrorController {
 				  messageSource); throw new MyNotFoundException(msg); 
 		  }
 				 
-				LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefId: " + funcionarios.toString());
+				LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefIdPadreTpefIdHijos: " + funcionarios.toString());
 				return funcionarios;
 	}
 	
