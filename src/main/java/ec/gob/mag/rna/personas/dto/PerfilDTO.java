@@ -1,8 +1,5 @@
 package ec.gob.mag.rna.personas.dto;
 
-
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -18,18 +15,23 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PerfilDTO {
-	@ApiModelProperty(notes = "Id del Perfil", position=1)
+	@ApiModelProperty(notes = "Id del Perfil", position = 1)
 	@JsonProperty("tpefId")
 	@JsonInclude(Include.NON_NULL)
 	private Long tpefId;
-	
-	@ApiModelProperty(notes = "Nombre del Perfil", position=2)
+
+	@ApiModelProperty(notes = "Nombre del Perfil", position = 2)
 	@JsonProperty("tpefNombre")
 	@JsonInclude(Include.NON_NULL)
 	private String tpefNombre;
-	
-	@ApiModelProperty(notes = "Id del proyecto", position=3)
+
+	@ApiModelProperty(notes = "Id del proyecto", position = 3)
 	@JsonProperty("proyId")
 	@JsonInclude(Include.NON_NULL)
 	private Long proyId;
+
+	@ApiModelProperty(value = "Campo que extrae el id del perfil del usuario", allowableValues = "")
+	@JsonProperty("pefId")
+	@JsonInclude(Include.NON_NULL)
+	private Long pefId;
 }
