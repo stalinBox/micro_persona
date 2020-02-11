@@ -64,11 +64,11 @@ public class FuncionarioService {
 	 *
 	 * @param Long upsIdPadre
 	 * @param Long proyId
-	 * @param Long tpefId
+	 * @param Long pefId
 	 * @return List<FuncionarioView>, que cumplen con la condición.
 	 */
-	public List<FuncionarioView> findByUpsIdPadreAndProyIdAndTpefId(Long upsIdPadre, Long proyId, Long tpefId) {
-		List<FuncionarioView> tfcs = funcionarioRepository.findByUpsIdPadreAndProyIdAndTpefId(upsIdPadre, proyId,
+	public List<FuncionarioView> findByUpsIdPadreAndProyIdAndPefId(Long upsIdPadre, Long proyId, Long tpefId) {
+		List<FuncionarioView> tfcs = funcionarioRepository.findByUpsIdPadreAndProyIdAndPefId(upsIdPadre, proyId,
 				tpefId);
 		if (tfcs == null || tfcs.size() == 0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
@@ -85,14 +85,14 @@ public class FuncionarioService {
 	 *
 	 * @param Long perId
 	 * @param Long proyId
-	 * @param Long tpefId
+	 * @param Long pefId
 	 * @return List<FuncionarioView>, que cumplen con la condición.
 	 */
-	public FuncionarioView findByPerIdAndProyIdAndTpefId(Long perId, Long proyId, Long tpefId) {
-		List<FuncionarioView> tfcs = funcionarioRepository.findByPerIdAndProyIdAndTpefId(perId, proyId, tpefId);
+	public FuncionarioView findByPerIdAndProyIdAndPefId(Long perId, Long proyId, Long pefId) {
+		List<FuncionarioView> tfcs = funcionarioRepository.findByPerIdAndProyIdAndPefId(perId, proyId, pefId);
 		if (tfcs == null || tfcs.size() == 0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
-					perId.toString() + " " + proyId.toString() + " " + tpefId.toString(), this.getClass(),
+					perId.toString() + " " + proyId.toString() + " " + pefId.toString(), this.getClass(),
 					"findByPerIdAndProyIdAndTpefId", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
 					messageSource);
 			throw new MyNotFoundException(msg);
@@ -107,8 +107,8 @@ public class FuncionarioService {
 	 * @param Long tpefId
 	 * @return FuncionarioView, que cumplen con la condición.
 	 */
-	public FuncionarioView findByUpsIdAndTpefId(Long upsId, Long tpefId) {
-		List<FuncionarioView> tfcs = funcionarioRepository.findByUpsIdAndTpefId(upsId, tpefId);
+	public FuncionarioView findByUpsIdAndPefId(Long upsId, Long tpefId) {
+		List<FuncionarioView> tfcs = funcionarioRepository.findByUpsIdAndPefId(upsId, tpefId);
 		if (tfcs == null || tfcs.size() == 0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
 					upsId.toString() + " " + tpefId.toString(), this.getClass(), "findByUpsIdAndTpefId",
@@ -156,14 +156,14 @@ public class FuncionarioService {
 	}
 
 	/**
-	 * Busca funcionarios por proyecto y tpefId
+	 * Busca funcionarios por proyecto y pefId
 	 *
 	 * @param Long proyId
-	 * @param Long tpefId
+	 * @param Long pefId
 	 * @return List<FuncionarioView>, que cumplen con la condición.
 	 */
-	public List<FuncionarioView> findByProyIdAndTpefId(Long proyId, Long tpefId) {
-		List<FuncionarioView> tfcs = funcionarioRepository.findByProyIdAndTpefId(proyId, tpefId);
+	public List<FuncionarioView> findByProyIdAndPefId(Long proyId, Long tpefId) {
+		List<FuncionarioView> tfcs = funcionarioRepository.findByProyIdAndPefId(proyId, tpefId);
 		if (tfcs == null || tfcs.size() == 0) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
 					proyId.toString() + " " + tpefId.toString(), this.getClass(), "findByProyIdAndTpefId",
@@ -193,12 +193,14 @@ public class FuncionarioService {
 			p.setProyId(t.getProyId());
 			p.setProyAbreviatura(t.getProyAbreviatura());
 			p.setProyNombre(t.getProyNombre());
+
 			proyectos.add(p);
 
 			PerfilDTO per = new PerfilDTO();
 			per.setProyId(t.getProyId());
 			per.setTpefId(t.getTpefId());
 			per.setTpefNombre(t.getTpefNombre());
+			per.setPefId(t.getPefId());
 			perfiles.add(per);
 
 			return t;
