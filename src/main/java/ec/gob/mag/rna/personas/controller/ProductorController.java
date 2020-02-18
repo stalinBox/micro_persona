@@ -143,7 +143,7 @@ public class ProductorController implements ErrorController {
 			@PathVariable Long ubiId, @RequestHeader(name = "Authorization") String token) {
 		DataTableRequest<ProductoresDTO> dataTableInRQ = new DataTableRequest<ProductoresDTO>(request);
 		PaginationCriteria pagination = dataTableInRQ.getPaginationRequest();
-		String baseQuery = "SELECT p.per_id AS \"id\",\r\n" + " p.per_nombre AS \"perNombre\",\r\n"
+		String baseQuery = "SELECT DISTINCT p.per_id AS \"id\",\r\n" + " p.per_nombre AS \"perNombre\",\r\n"
 				+ " p.per_apellido AS \"perApellido\",\r\n" + " p.per_nombres AS \"perNombres\",\r\n"
 				+ " p.per_identificacion AS \"perIdentificacion\",\r\n"
 				+ " p.per_dir_domicilio AS \"perDirDomicilio\",\r\n" + " pred.pre_id AS \"preId\",\r\n"
