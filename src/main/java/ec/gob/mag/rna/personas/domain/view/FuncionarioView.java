@@ -32,7 +32,7 @@ import lombok.ToString;
 @Builder
 //========== JPA ======================
 @Entity
-@Table(name = "tfcs", schema = "public")
+@Table(name = "tfcs", schema = "sc_organizacion")
 public class FuncionarioView implements java.io.Serializable {
 
 	/**
