@@ -48,13 +48,13 @@ public class ProductoresDTOPaginated implements Serializable {
 	@JsonProperty("perDirDomicilio")
 	private String perDirDomicilio;
 
-	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla predio", position = 7)
-	@JsonProperty("preId")
-	private Long preId;
+//	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla predio", position = 7)
+//	@JsonProperty("preId")
+//	private Long preId;
 
-	@ApiModelProperty(value = "Id de lo Ubicacion del domicilio", position = 8)
-	@JsonProperty("ubiId")
-	private Long ubiId;
+//	@ApiModelProperty(value = "Id de lo Ubicacion del domicilio", position = 8)
+//	@JsonProperty("ubiId")
+//	private Long ubiId;
 
 	@ApiModelProperty(value = "Número de Teléfono de la persona", position = 9)
 	@JsonProperty("perTelefono")
