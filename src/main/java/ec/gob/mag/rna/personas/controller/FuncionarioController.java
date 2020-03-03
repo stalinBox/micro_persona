@@ -50,6 +50,18 @@ public class FuncionarioController implements ErrorController {
 	@Autowired
 	private MessageSource messageSource;
 
+	@RequestMapping(value = "/findSupervisores/{perId}/{pefIdPadre}/{pefIdHijo}/{proyId}", method = RequestMethod.GET)
+	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionarioView.class)
+	@ResponseStatus(HttpStatus.OK)
+	public List<FuncionarioView> findSupervisores(@RequestHeader(name = "Authorization") String token,
+			@PathVariable Long perId, @PathVariable Long pefIdPadre, @PathVariable Long pefIdHijo,
+			@PathVariable Long proyId) {
+		List<FuncionarioView> funcionarios = null;
+		funcionarios = funcionarioService.findSupervidor(perId, pefIdPadre, pefIdHijo, proyId);
+		LOGGER.info("Funcionarios findAll: " + funcionarios.toString());
+		return funcionarios;
+	}
+
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET)
 	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionarioView.class)
 	@ResponseStatus(HttpStatus.OK)
@@ -114,45 +126,6 @@ public class FuncionarioController implements ErrorController {
 		return funcionarios;
 	}
 
-	/*** a reemplazar ***/
-
-//	@RequestMapping(value = "/findByPerIdAndProyIdAndTpefId/{perId}/{proyId}/{tpefId}", method = RequestMethod.GET)
-//	@ApiOperation(value = "Funcionarios por Id de persona, Id del proyecto y perfil de usuario", response = FuncionarioView.class)
-//	// @ResponseStatus(HttpStatus.OK)
-//	public List<FuncionarioView> findByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
-//			@PathVariable Long tpefId, @RequestHeader(name = "Authorization") String token) {
-//		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
-//
-//		// perfil adinistrador 18
-//		if (tpefId.equals(new Long(18)) && perId.equals(new Long(0))) {
-//			funcionarios = funcionarioService.findByProyIdAndTpefId(proyId, new Long(16));
-//		} else {
-//			// devuelve el registro de la persona en la vista
-//			FuncionarioView fu = funcionarioService.findByPerIdAndProyIdAndTpefId(perId, proyId, tpefId);
-//			// consulta los registros hijos
-//			if (tpefId.equals(new Long(13))) {
-//				funcionarios = funcionarioService.findByUpsIdPadreAndProyIdAndTpefId(fu.getUpsId(), proyId,
-//						new Long(5));
-//			} else if (tpefId.equals(new Long(16))) {
-//				funcionarios = funcionarioService.findByUpsIdPadreAndProyIdAndTpefId(fu.getUpsId(), proyId,
-//						new Long(13));
-//			}
-//		}
-//		
-//		if (funcionarios.equals(null)   || funcionarios.size() == 0) { String msg =
-//				  MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist_find_array.message",
-//				  "perId: "+perId +", proyId: "+proyId +",tpefId: "+tpefId, this.getClass(), "findByUpsIdPadreAndProyIdAndTpefId",
-//				  EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
-//				  messageSource); throw new MyNotFoundException(msg); }
-//				 
-//
-//				LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefId: " + funcionarios.toString());
-//				return funcionarios;
-//		
-//		
-//	}
-	/**************/
-
 	// ok
 	@RequestMapping(value = "/findByProyIdAndPefId/{proyId}/{pefId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Funcionarios por Id del proyecto y perfil de usuario", response = FuncionarioView.class)
@@ -192,26 +165,6 @@ public class FuncionarioController implements ErrorController {
 		LOGGER.info("Funcionario findPadreByPerIdAndProyIdAndTpefIdHijoAndTpefIdPadre: " + pfu.toString());
 		return f;
 	}
-
-	/******* a borrar *******/
-//	@RequestMapping(value = "/findPadreByPerIdAndProyIdAndTpefId/{perId}/{proyId}/{tpefId}", method = RequestMethod.GET)
-//	@ApiOperation(value = "Busca un funcionario por id de persona, id del proyecto y perfil de usuario", response = FuncionarioView.class)
-//	@ResponseStatus(HttpStatus.OK)
-//	public FuncionarioView findPadreByPerIdAndProyIdAndTpefId(@PathVariable Long perId, @PathVariable Long proyId,
-//			@PathVariable Long tpefId, @RequestHeader(name = "Authorization") String token) {
-//		List<FuncionarioView> funcionarios = new ArrayList<FuncionarioView>();
-//		// devuelve el registro de la persona en la vista
-//		FuncionarioView pfu = funcionarioService.findByPerIdAndProyIdAndTpefId(perId, proyId, tpefId);
-//		// consulta los registros hijos
-//		if (tpefId.equals(new Long(5))) {
-//			pfu = funcionarioService.findByUpsIdAndTpefId(pfu.getUpsIdPadre(), new Long(13));
-//		} else if (tpefId.equals(new Long(13))) {
-//			pfu = funcionarioService.findByUpsIdAndTpefId(pfu.getUpsIdPadre(), new Long(16));
-//		}
-//		LOGGER.info("Funcionario findPadreByPerIdAndProyIdAndTpefId: " + funcionarios.toString());
-//		return pfu;
-//	}
-	/***************/
 
 	@RequestMapping(value = "/findByUpsIdPadreAndProyIdAndPefId/{upsIdPadre}/{proyId}/{pefId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca funcionarios por id de padre, id del proyecto y perfil de usuario", response = FuncionarioView.class)
