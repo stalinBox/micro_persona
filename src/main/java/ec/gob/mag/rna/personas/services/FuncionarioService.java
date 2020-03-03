@@ -37,6 +37,23 @@ public class FuncionarioService {
 	@Autowired
 	private MessageSource messageSource;
 
+	/**
+	 * Devulve el listado de todos los Supervisores para RENAGRO
+	 *
+	 * @return List<FuncionarioView>.
+	 */
+	public List<FuncionarioView> findSupervidor(Long perId, Long pefIdPadre, Long pefIdHijo, Long proyId) {
+		List<FuncionarioView> tfcs = funcionarioRepository.findSupervisores(perId, pefIdPadre, pefIdHijo, proyId);
+		if (tfcs == null || tfcs.size() == 0) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", null,
+					this.getClass(), "findAll", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
+					messageSource);
+			throw new MyNotFoundException(msg);
+
+		}
+		return tfcs;
+	}
+
 	public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
 		Map<Object, Boolean> map = new ConcurrentHashMap<>();
 		return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
