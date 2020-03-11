@@ -23,7 +23,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 //@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 public class MicroRnaProductores extends SpringBootServletInitializer {
-
+//HOLA MUNDO
 	public static void main(String[] args) {
 		SpringApplication.run(MicroRnaProductores.class, args);
 	}
