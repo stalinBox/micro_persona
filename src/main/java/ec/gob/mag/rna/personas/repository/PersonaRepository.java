@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import ec.gob.mag.rna.personas.domain.Persona;
-import ec.gob.mag.rna.personas.dto.PersonaDTO;
 
 @Repository("personaRepository")
 public interface PersonaRepository extends CrudRepository<Persona, Long> {
@@ -17,8 +17,6 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 	Optional<Persona> findByPerIdentificacion(String perIdentificacion);
 
 	Optional<Persona> findById(Long id);
-
-	PersonaDTO save(PersonaDTO persona);
 
 	@SuppressWarnings("unchecked")
 	Persona save(Persona persona);
@@ -37,4 +35,8 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 
 	Persona findByPersonaTipos_Id(Long perId);
 
+	@Query("SELECT p FROM PersonaTipo pt LEFT JOIN Productor pr ON pt.id = pr.personaTipo "
+			+ "INNER JOIN Persona p ON p.id = pt.persona WHERE p.perIdentificacion=?1 AND "
+			+ "pt.petiEstado = 11 AND pt.petiEliminado = FALSE AND pt.catTipoPer=46")
+	List<Persona> findByperIdentificacion(String identificacion);
 }

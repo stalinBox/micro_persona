@@ -1,6 +1,7 @@
 package ec.gob.mag.rna.personas.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,9 +30,6 @@ import ec.gob.mag.rna.personas.domain.pagination.AppUtil;
 import ec.gob.mag.rna.personas.domain.pagination.DataTableRequest;
 import ec.gob.mag.rna.personas.domain.pagination.DataTableResults;
 import ec.gob.mag.rna.personas.domain.pagination.PaginationCriteria;
-import ec.gob.mag.rna.personas.domain.sp.ProcedureProductor;
-import ec.gob.mag.rna.personas.domain.view.ProductorView;
-import ec.gob.mag.rna.personas.dto.PersonaDTO;
 import ec.gob.mag.rna.personas.dto.ProductoresDTO;
 import ec.gob.mag.rna.personas.dto.ProductoresDTOPaginated;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
@@ -70,21 +68,22 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseUpdate createProductor(@Valid @RequestBody PersonaDTO productor,
+	public Object createProductor(@Valid @RequestBody Persona productor,
 			@RequestHeader(name = "Authorization") String token) {
-		PersonaDTO productorResponse = productorService.saveProductor(productor);
+		Object productorResponse = productorService.saveProductor(productor);
+		System.out.println("Id del Productore creado: ");
 		LOGGER.info("Productor Create: " + productorResponse.toString());
-		return new ResponseUpdate("productor", productorResponse.getId());
+		return productorResponse;
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseUpdate updateProductor(@Valid @RequestBody PersonaDTO productor,
+	public Object updateProductor(@Valid @RequestBody Persona productor,
 			@RequestHeader(name = "Authorization") String token) {
-		PersonaDTO productorResponse = productorService.saveProductor(productor);
+		Object productorResponse = productorService.saveProductor(productor);
 		LOGGER.info("Productor update: " + productorResponse.toString());
-		return new ResponseUpdate("productor", productorResponse.getId());
+		return productorResponse;
 	}
 
 	/*********** METODOS SELECT ***************/
@@ -92,47 +91,47 @@ public class ProductorController implements ErrorController {
 
 	/*********** PRODUCTOR párametro cedula ***********/
 	@RequestMapping(value = "/findByCedulaProductor/{cedula}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por numero de cedula", response = ProcedureProductor.class)
+	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por numero de cedula", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProcedureProductor> getSPProductorByCedula(@Valid @PathVariable String cedula,
+	public List<Persona> getSPProductorByCedula(@Valid @PathVariable String cedula,
 			@RequestHeader(name = "Authorization") String token) {
-		List<ProcedureProductor> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
+		List<Persona> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
 		LOGGER.info("Productor findByCedula: " + procedureProductor.toString());
 		return procedureProductor;
 	}
 
 	/*********** PRODUCTOR párametro per_id ***********/
 	@RequestMapping(value = "/findById/{perId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por perId", response = ProcedureProductor.class)
+	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por perId", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<ProcedureProductor> getSPProductorByPerId(@Valid @PathVariable Long perId,
+	public Optional<Persona> getSPProductorByPerId(@Valid @PathVariable Long perId,
 			@RequestHeader(name = "Authorization") String token) {
-		List<ProcedureProductor> procedureProductor = productorService.findByperId(perId);
+		Optional<Persona> procedureProductor = productorService.findByperId(perId);
 		LOGGER.info("Productor findById: " + procedureProductor.toString());
 		return procedureProductor;
 	}
 
 	/************ PRODUCTOR parámetro Id Organización ***************/
-	@RequestMapping(value = "/findByOrgId/{orgId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca productores por Id de la Organizacion", response = ProductorView.class)
-	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId,
-			@RequestHeader(name = "Authorization") String token) {
-		List<Persona> personas = productorService.findByOrgId(orgId);
-		LOGGER.info("Productores findByOrgId: " + personas.toString());
-		return personas;
-	}
+//	@RequestMapping(value = "/findByOrgId/{orgId}", method = RequestMethod.GET)
+//	@ApiOperation(value = "Busca productores por Id de la Organizacion")
+//	@ResponseStatus(HttpStatus.OK)
+//	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId,
+//			@RequestHeader(name = "Authorization") String token) {
+//		List<Persona> personas = productorService.findByOrgId(orgId);
+//		LOGGER.info("Productores findByOrgId: " + personas.toString());
+//		return personas;
+//	}
 
 	/*************** ELIMINAR ***************/
-	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca productores por Id de la Ubicacion", response = ProductorView.class)
-	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
-			@RequestHeader(name = "Authorization") String token) {
-		List<Persona> personas = productorService.findProductorByUbiIdDomicilio(ubiId);
-		LOGGER.info("Productores findByUbiId: " + personas.toString());
-		return personas;
-	}
+//	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
+//	@ApiOperation(value = "Busca productores por Id de la Ubicacion")
+//	@ResponseStatus(HttpStatus.OK)
+//	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
+//			@RequestHeader(name = "Authorization") String token) {
+//		List<Persona> personas = productorService.findProductorByUbiIdDomicilio(ubiId);
+//		LOGGER.info("Productores findByUbiId: " + personas.toString());
+//		return personas;
+//	}
 
 	/************ PAGINACION PRODUCTOR parámetro id Ubicación *********/
 	/** UTILIZAR EN VEZ DE /findByUbiId/{ubiId} */

@@ -37,7 +37,6 @@ public class PersonaService {
 	 * @param Long              tipoEvaluado
 	 * @return Boolean.
 	 */
-
 	public Boolean checkPersonaTipo(List<PersonaTipo> personasTipo, Long tipoEvaluado) {
 		if (personasTipo != null)
 			for (PersonaTipo personaTipo : personasTipo) {

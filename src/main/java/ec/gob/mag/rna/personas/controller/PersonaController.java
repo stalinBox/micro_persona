@@ -59,7 +59,7 @@ public class PersonaController implements ErrorController {
 
 	@PreAuthorize("#username == authentication.principal.username")
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca persona por Id", response = Persona.class)
+	@ApiOperation(value = "Busca persona por perId", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
 	public Persona getPersonaById(@Valid @PathVariable Long id, @RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.findById(id);

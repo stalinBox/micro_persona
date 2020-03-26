@@ -1,13 +1,15 @@
 package ec.gob.mag.rna.personas.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -18,10 +20,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
@@ -42,9 +42,7 @@ import lombok.ToString;
 //========== JPA ======================
 @Entity
 @Table(name = "productor", schema = "sc_agricola")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ord", scope = PersonaTipo.class)
-
-public class Productor implements java.io.Serializable {
+public class Productor implements Serializable {
 	private static final long serialVersionUID = -2262203418770500667L;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla productor")
@@ -53,14 +51,6 @@ public class Productor implements java.io.Serializable {
 	@JsonProperty("proId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla persona tipo")
-	@OneToOne()
-	@JoinColumn(name = "peti_id")
-	@JsonProperty("personaTipo")
-	@JsonInclude(Include.NON_NULL)
-	@JsonBackReference(value = "persona-tipos-productor")
-	private PersonaTipo personaTipo;
 
 	@ApiModelProperty(value = "368=act.agricola 369=act.pecuaria 370=act.forestal...")
 	@Column(name = "cat_act_economica")
@@ -188,6 +178,15 @@ public class Productor implements java.io.Serializable {
 	@JsonProperty("proTotalRecibeBonoDesarrollo")
 	@JsonInclude(Include.NON_NULL)
 	private Long proTotalRecibeBonoDesarrollo;
+
+	/********** RELACIONES JPA ***********/
+	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla persona tipo")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "peti_id")
+	@JsonProperty("personaTipo")
+	@JsonInclude(Include.NON_NULL)
+	@JsonBackReference(value = "persona-tipos-productor")
+	private PersonaTipo personaTipo;
 
 	@PrePersist
 	public void prePersist() {

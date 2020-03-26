@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.PersonaTipo;
-import ec.gob.mag.rna.personas.domain.view.ProductorView;
 
 public class Util {
 
@@ -55,7 +54,7 @@ public class Util {
 		return Date.from(ldt.atZone(ZoneId.of("UTC-05:00")).toInstant());
 	}
 
-	public static Persona parseToPersona(ProductorView productor) {
+	public static Persona parseToPersona(Persona productor) {
 		if (productor == null)
 			return null;
 		Persona persona = new Persona();
@@ -80,7 +79,7 @@ public class Util {
 			List<PersonaTipo> personasTipo = new ArrayList<>();
 			PersonaTipo personaTipo = new PersonaTipo();
 			personaTipo.setId(productor.getPetiId());
-			personaTipo.setAreaId(productor.getAreaId());
+//			personaTipo.setAreaId(productor.getAreaId());
 			personasTipo.add(personaTipo);
 			persona.setPersonaTipos(personasTipo);
 
@@ -88,7 +87,7 @@ public class Util {
 		return persona;
 	}
 
-	public static List<Persona> parseToListPersona(List<ProductorView> productores) {
+	public static List<Persona> parseToListPersona(List<Persona> productores) {
 		if (productores == null)
 			return null;
 		return productores.stream().map(p -> {
