@@ -170,6 +170,12 @@ public class Persona implements Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private Integer perFuenteId;
 
+	@ApiModelProperty(value = "Identificación de la aplicacion origen", required = false)
+	@Column(name = "per_fuente_apli")
+	@JsonProperty("perFuenteApli")
+	@JsonInclude(Include.NON_NULL)
+	private Integer perFuenteApli;
+
 	@ApiModelProperty(value = "Fecha de migracion", required = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "per_fuente_fecha", length = 29)
@@ -360,6 +366,7 @@ public class Persona implements Serializable {
 		this.perActUsu = null;
 		this.perEliminado = false;
 		this.perCedula = this.perIdentificacion;
+		this.perRegFecha = new Date();
 	}
 
 	@PreUpdate

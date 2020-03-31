@@ -85,7 +85,6 @@ public class PersonaController implements ErrorController {
 		List<Persona> personas = personaService.findByTipo(tipo, hoja, items);
 		LOGGER.info("Personas findByTipo: " + personas.toString());
 		return personas;
-
 	}
 
 	@RequestMapping(value = "/findByCedulaAndTipo/{cedula}/{tipo}", method = RequestMethod.GET)
@@ -107,7 +106,6 @@ public class PersonaController implements ErrorController {
 		List<Persona> personas = personaService.findByTipoAndAreasIn(tipo, areaIds);
 		LOGGER.info("Persona findAllByAreasAndTipo: " + personas.toString());
 		return personas;
-
 	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)

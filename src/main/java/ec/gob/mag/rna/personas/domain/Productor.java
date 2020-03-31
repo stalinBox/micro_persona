@@ -194,5 +194,6 @@ public class Productor implements Serializable {
 		this.proActFecha = null;
 		this.proActUsu = null;
 		this.proEliminado = false;
+		this.proRegFecha = new Date();
 	}
 }

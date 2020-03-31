@@ -169,6 +169,7 @@ public class PersonaTipo implements Serializable {
 		this.petiActFecha = null;
 		this.petiActUsu = null;
 		this.petiEliminado = false;
+		this.petiRegFecha = new Date();
 	}
 
 }

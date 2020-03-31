@@ -81,7 +81,7 @@ public class ProductorController implements ErrorController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Object updateProductor(@Valid @RequestBody Persona productor,
 			@RequestHeader(name = "Authorization") String token) {
-		Object productorResponse = productorService.saveProductor(productor);
+		Object productorResponse = productorService.updateProductor(productor);
 		LOGGER.info("Productor update: " + productorResponse.toString());
 		return productorResponse;
 	}
