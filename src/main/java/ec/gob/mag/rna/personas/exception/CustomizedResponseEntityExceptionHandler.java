@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ec.gob.mag.rna.personas.exception.consumer.CmNotFoundException;
 import ec.gob.mag.rna.personas.util.ModifyString;
-import ec.gob.mag.rna.personas.util.MyExceptionUtility;
+//import ec.gob.mag.rna.personas.util.MyExceptionUtility;
 
 @ControllerAdvice
 @RestController
@@ -60,8 +60,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 			myEx.setStatus(status);
 			myEx.setTimestamp(new Date());
 			exResponse = myEx;
-			String stack = MyExceptionUtility.getExceptionDump(ex);
-			myEx.setStack(stack);
+//			String stack = MyExceptionUtility.getExceptionDump(ex);
+//			myEx.setStack(stack);
 
 		} catch (Exception e) {
 			String msgEx = null;
@@ -72,13 +72,13 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 					msgEx = ex.getMessage();
 			} else
 				msgEx = msgException;
-			String stack = MyExceptionUtility.getExceptionDump(ex);
+//			String stack = MyExceptionUtility.getExceptionDump(ex);
 			myTypeCod = (myTypeCod == null ? EnumCodeExceptions.ERROR_UNRECOGNIZABLE : myTypeCod);
 			EnumTypeExceptions myTypeEx = (myTypeCod == EnumCodeExceptions.ERROR_UNRECOGNIZABLE
 					? EnumTypeExceptions.CRITICAL
 					: EnumTypeExceptions.WARN);
 			exResponse = new ExceptionResponse(status, new Date(), msgEx, null, msgDetail, proyecto, null, null,
-					myTypeCod, myTypeEx, stack);
+					myTypeCod, myTypeEx);
 
 		}
 		return new ResponseEntity(exResponse, status);

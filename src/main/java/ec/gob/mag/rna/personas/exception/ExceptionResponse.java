@@ -22,10 +22,13 @@ public class ExceptionResponse {
 	private HttpStatus status;
 	private Date timestamp;
 	private String message;
+
 	@JsonInclude(Include.NON_NULL)
 	private String details;
+
 	@JsonInclude(Include.NON_NULL)
 	private String detailsJson;
+
 	@JsonInclude(Include.NON_NULL)
 	private String proyect;
 
@@ -41,7 +44,7 @@ public class ExceptionResponse {
 	@JsonInclude(Include.NON_NULL)
 	private EnumTypeExceptions type;
 
-	@JsonInclude(Include.NON_NULL)
-	private String stack;
+//	@JsonInclude(Include.NON_NULL)
+//	private String stack;
 
 }

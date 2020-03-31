@@ -70,7 +70,6 @@ public class ProductorService {
 				return personaTipoRepository.save(personatipo);
 			} else {
 				List<Productor> prod = productorResository.findByPersonaTipo_Id(pt.get(0).getId());
-				System.out.println("------- productor: " + prod);
 				if (prod.size() == 0 || prod.equals(null)) {
 					// Guardar en 1 TABLA productores;
 					productor.setPersonaTipo(person.get().getPersonaTipos().get(0));
@@ -78,8 +77,7 @@ public class ProductorService {
 				} else {
 					// Excepcion por tener todos los campos completos
 					throw new ProductorNotFoundException(String.format(
-							messageSource.getMessage("error.entity_exist", null, LocaleContextHolder.getLocale()),
-							Productor.class.getName()));
+							messageSource.getMessage("error.entity_exist", null, null), Productor.class.getName()));
 				}
 			}
 		}
