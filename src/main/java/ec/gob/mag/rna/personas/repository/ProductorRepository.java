@@ -14,14 +14,5 @@ public interface ProductorRepository extends CrudRepository<Productor, Long> {
 	Productor save(Productor productor);
 
 	List<Productor> findByPersonaTipo_Id(Long pt);
-	// List<ProductorView> findAll(Pageable pageable);
-//
-//	Optional<ProductorView> findById(Long perIdentificacion);
-//
-//	List<ProductorView> findByUbiIdDomicilio(Long ubiIdDomicilio);
-//
-//	List<ProductorView> findByOrgId(Long orgId);
-//
-//	Optional<ProductorView> findByPerIdentificacion(String perIdentificacion);
 
 }

@@ -111,30 +111,7 @@ public class ProductorController implements ErrorController {
 		return procedureProductor;
 	}
 
-	/************ PRODUCTOR parámetro Id Organización ***************/
-//	@RequestMapping(value = "/findByOrgId/{orgId}", method = RequestMethod.GET)
-//	@ApiOperation(value = "Busca productores por Id de la Organizacion")
-//	@ResponseStatus(HttpStatus.OK)
-//	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId,
-//			@RequestHeader(name = "Authorization") String token) {
-//		List<Persona> personas = productorService.findByOrgId(orgId);
-//		LOGGER.info("Productores findByOrgId: " + personas.toString());
-//		return personas;
-//	}
-
-	/*************** ELIMINAR ***************/
-//	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
-//	@ApiOperation(value = "Busca productores por Id de la Ubicacion")
-//	@ResponseStatus(HttpStatus.OK)
-//	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
-//			@RequestHeader(name = "Authorization") String token) {
-//		List<Persona> personas = productorService.findProductorByUbiIdDomicilio(ubiId);
-//		LOGGER.info("Productores findByUbiId: " + personas.toString());
-//		return personas;
-//	}
-
 	/************ PAGINACION PRODUCTOR parámetro id Ubicación *********/
-	/** UTILIZAR EN VEZ DE /findByUbiId/{ubiId} */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/findByUbiIdPaginated/{ubiId}", method = RequestMethod.GET)
 	@ResponseBody

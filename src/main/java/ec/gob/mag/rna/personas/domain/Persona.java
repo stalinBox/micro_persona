@@ -367,6 +367,7 @@ public class Persona implements Serializable {
 		this.perEliminado = false;
 		this.perCedula = this.perIdentificacion;
 		this.perRegFecha = new Date();
+		this.perRuc = this.perIdentificacion + "001";
 	}
 
 	@PreUpdate

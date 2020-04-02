@@ -90,7 +90,6 @@ public class PersonaTipoService {
 		return lista;
 	}
 
-	// RENAGRO
 	/**
 	 * Buscar una PersonaTipo por Id de Persona y categoria
 	 *
