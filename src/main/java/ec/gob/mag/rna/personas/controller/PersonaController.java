@@ -1,6 +1,7 @@
 package ec.gob.mag.rna.personas.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
@@ -54,18 +54,16 @@ public class PersonaController implements ErrorController {
 		Persona persona = personaService.findByPerIdentificacion(cedula);
 		LOGGER.info("Persona findByCedula: " + persona.toString());
 		return persona;
-
 	}
 
-	@PreAuthorize("#username == authentication.principal.username")
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por perId", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public Persona getPersonaById(@Valid @PathVariable Long id, @RequestHeader(name = "Authorization") String token) {
-		Persona persona = personaService.findById(id);
+	public Optional<Persona> getPersonaById(@Valid @PathVariable Long id,
+			@RequestHeader(name = "Authorization") String token) {
+		Optional<Persona> persona = personaService.findById(id);
 		LOGGER.info("Persona findById: " + persona.toString());
 		return persona;
-
 	}
 
 	@RequestMapping(value = "/findByPesonaTipoId/{petiId}", method = RequestMethod.GET)

@@ -1,6 +1,7 @@
 package ec.gob.mag.rna.personas.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -70,15 +71,15 @@ public class PersonaService {
 	 * @param Long id
 	 * @return Persona, devuelve el objeto con información de Tipos de Personas.
 	 */
-	public Persona findById(Long id) {
-		Persona persona = personaRepository.findById(id).get();
-		if (persona == null) {
+	public Optional<Persona> findById(Long id) {
+		Optional<Persona> persona = personaRepository.findById(id);
+		if (!persona.isPresent()) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", id.toString(),
 					this.getClass(), "findById", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
 					messageSource);
 			throw new MyNotFoundException(msg);
 		}
-		// persona.setPersonaTipos(null);
+		persona.get().setPersonaTipos(null);
 		return persona;
 	}
 
