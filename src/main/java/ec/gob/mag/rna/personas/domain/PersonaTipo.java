@@ -1,6 +1,9 @@
 package ec.gob.mag.rna.personas.domain;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,7 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,11 +26,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import ec.gob.mag.rna.personas.dto.PredioDTO;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
@@ -41,7 +45,6 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(of = "id")
-//@EqualsAndHashCode(of="id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -49,9 +52,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "persona_tipo", schema = "sc_organizacion", uniqueConstraints = @UniqueConstraint(columnNames = {
 		"area_id", "per_id", "cat_tipo_per" }))
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ord", scope = PersonaTipo.class)
-
-public class PersonaTipo implements java.io.Serializable {
+public class PersonaTipo implements Serializable {
 	private static final long serialVersionUID = 5797912094414225146L;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona Tipo")
@@ -72,14 +73,6 @@ public class PersonaTipo implements java.io.Serializable {
 	@JsonProperty("cargoId")
 	@JsonInclude(Include.NON_NULL)
 	private Long cargoId;
-
-	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "per_id")
-	@JsonProperty("persona")
-	@JsonInclude(Include.NON_NULL)
-	@JsonBackReference(value = "persona-persona-tipos")
-	private Persona persona;
 
 	@ApiModelProperty(value = "45=Funcionario 46=Ciudadano ...")
 	@Column(name = "cat_tipo_per")
@@ -146,12 +139,29 @@ public class PersonaTipo implements java.io.Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private Date petiActFecha;
 
+	/*********** RELACIONES JPA ***********/
 	@ApiModelProperty(value = "Campo productor")
-	@OneToOne(mappedBy = "personaTipo", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH })
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "personaTipo", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, orphanRemoval = true)
 	@JsonProperty("productor")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-tipos-productor")
-	private Productor productor;
+	private List<Productor> productor;
+
+	@ApiModelProperty(value = "Campo predio")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "personaTipo")
+	@JsonProperty("predios")
+	@JsonInclude(Include.NON_NULL)
+	@JsonManagedReference(value = "persona-tipos-predio")
+	private Set<PredioDTO> predios;
+
+	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "per_id")
+	@JsonProperty("persona")
+	@JsonInclude(Include.NON_NULL)
+	@JsonBackReference(value = "persona-persona-tipos")
+	private Persona persona;
 
 	@PrePersist
 	public void prePersist() {
@@ -159,6 +169,7 @@ public class PersonaTipo implements java.io.Serializable {
 		this.petiActFecha = null;
 		this.petiActUsu = null;
 		this.petiEliminado = false;
+		this.petiRegFecha = new Date();
 	}
 
 }

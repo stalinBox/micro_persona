@@ -1,5 +1,6 @@
 package ec.gob.mag.rna.personas.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -23,13 +24,11 @@ import javax.validation.constraints.Email;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -51,11 +50,9 @@ import lombok.ToString;
 @Entity
 @Table(name = "persona", schema = "sc_organizacion", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "per_identificacion"), @UniqueConstraint(columnNames = "per_cedula") })
-//============== Evita Recursividad por relaciones =============
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "ord", scope = Persona.class)
+public class Persona implements Serializable {
 
-public class Persona implements java.io.Serializable {
-	private static final long serialVersionUID = 6540875718900178877L;
+	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona", required = false, readOnly = true)
 	@Id
@@ -172,6 +169,12 @@ public class Persona implements java.io.Serializable {
 	@JsonProperty("perFuenteId")
 	@JsonInclude(Include.NON_NULL)
 	private Integer perFuenteId;
+
+	@ApiModelProperty(value = "Identificación de la aplicacion origen", required = false)
+	@Column(name = "per_fuente_apli")
+	@JsonProperty("perFuenteApli")
+	@JsonInclude(Include.NON_NULL)
+	private Integer perFuenteApli;
 
 	@ApiModelProperty(value = "Fecha de migracion", required = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -335,25 +338,26 @@ public class Persona implements java.io.Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private String catEtniaOtra;
 
-	@ApiModelProperty(value = "Tipos persona")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH })
-	@JsonProperty("personaTipos")
-	@JsonInclude(Include.NON_NULL)
-	@JsonManagedReference(value = "persona-persona-tipos")
-	private List<PersonaTipo> personaTipos;
-
 	@ApiModelProperty(value = "Variable transitoria de petiId", required = true)
 	@Transient
 	@JsonProperty("petiId")
 	@JsonInclude(Include.NON_NULL)
 	private Long petiId;
 
-	@ApiModelProperty(value = "Tipo de productor")
 	@Transient
+	@ApiModelProperty(value = "Tipo de productor")
 	@JsonProperty("tipoProductor")
 	@JsonInclude(Include.NON_NULL)
 	private String tipoProductor;
+
+	/********* RELACIONES JPA ************/
+	@ApiModelProperty(value = "Tipos persona")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REFRESH }, orphanRemoval = true)
+	@JsonProperty("personaTipos")
+	@JsonInclude(Include.NON_NULL)
+	@JsonManagedReference(value = "persona-persona-tipos")
+	private List<PersonaTipo> personaTipos;
 
 	@PrePersist
 	public void prePersist() {
@@ -362,12 +366,13 @@ public class Persona implements java.io.Serializable {
 		this.perActUsu = null;
 		this.perEliminado = false;
 		this.perCedula = this.perIdentificacion;
+		this.perRegFecha = new Date();
+		this.perRuc = this.perIdentificacion + "001";
 	}
 
 	@PreUpdate
 	public void preUpdate() {
 		this.perCedula = this.perIdentificacion;
-
 	}
 
 }

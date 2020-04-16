@@ -89,4 +89,22 @@ public class PersonaTipoService {
 		}
 		return lista;
 	}
+
+	/**
+	 * Buscar una PersonaTipo por Id de Persona y categoria
+	 *
+	 * @param Long perid
+	 * @param Long catTipPer
+	 * @return PersonaTipo , si cumple la condición. Exception, si no cumple.
+	 */
+	public Optional<PersonaTipo> findByPersona_IdAndcatTipoPer(Long perId, Long catTipPer) {
+		Optional<PersonaTipo> lista = personaTipoRepository.findByPersona_IdAndCatTipoPer(perId, catTipPer);
+		if (lista == null || lista.equals(null)) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", perId.toString(),
+					this.getClass(), "findPersonaTipoByPerId", EnumTypeExceptions.INFO,
+					EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
+			throw new MyNotFoundException(msg);
+		}
+		return lista;
+	}
 }

@@ -19,4 +19,5 @@ public interface PersonaTipoRepository extends CrudRepository<PersonaTipo, Long>
 
 	List<PersonaTipo> findByareaId(Long areaId);
 
+	Optional<PersonaTipo> findByPersona_IdAndCatTipoPer(Long perId, Long catTipPer);
 }

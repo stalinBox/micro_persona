@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ec.gob.mag.rna.personas.domain.Persona;
-import ec.gob.mag.rna.personas.domain.view.ProductorView;
 import ec.gob.mag.rna.personas.dto.ProductorOrganizacionDTO;
 import ec.gob.mag.rna.personas.services.SocioTipoProductorViewService;
 import io.swagger.annotations.Api;
@@ -43,7 +42,7 @@ public class SocioTipoProductorViewController implements ErrorController {
 	private SocioTipoProductorViewService sociotipoproductorviewService;
 
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca un socio tipo productor por numero de cedula", response = ProductorView.class)
+	@ApiOperation(value = "Busca un socio tipo productor por numero de cedula")
 	@ResponseStatus(HttpStatus.OK)
 	public Persona getProductorByCedula(@Valid @PathVariable String cedula,
 			@RequestHeader(name = "Authorization") String token) {
@@ -53,7 +52,7 @@ public class SocioTipoProductorViewController implements ErrorController {
 	}
 
 	@RequestMapping(value = "/findByOrgId/{orgId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca socios tipo productores por Id de la Organizacion", response = ProductorView.class)
+	@ApiOperation(value = "Busca socios tipo productores por Id de la Organizacion")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId,
 			@RequestHeader(name = "Authorization") String token) {
@@ -63,7 +62,7 @@ public class SocioTipoProductorViewController implements ErrorController {
 	}
 
 	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca socios tipo productores por Id de la Ubicacion", response = ProductorView.class)
+	@ApiOperation(value = "Busca socios tipo productores por Id de la Ubicacion")
 	@ResponseStatus(HttpStatus.OK)
 	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
 			@RequestHeader(name = "Authorization") String token) {
@@ -73,7 +72,7 @@ public class SocioTipoProductorViewController implements ErrorController {
 	}
 
 	@RequestMapping(value = "/findOrgByPetiId/{petiId}", method = RequestMethod.GET)
-	@ApiOperation(value = "Busca las organizaciones del petiId", response = ProductorView.class)
+	@ApiOperation(value = "Busca las organizaciones del petiId")
 	@ResponseStatus(HttpStatus.OK)
 	public List<ProductorOrganizacionDTO> findOrgByPetiId(@Valid @PathVariable Long petiId,
 			@RequestHeader(name = "Authorization") String token) {

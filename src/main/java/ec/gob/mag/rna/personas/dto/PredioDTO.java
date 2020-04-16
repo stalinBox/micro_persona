@@ -1,6 +1,5 @@
 package ec.gob.mag.rna.personas.dto;
 
-
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -14,6 +13,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import ec.gob.mag.rna.personas.domain.PersonaTipo;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -37,7 +39,6 @@ import lombok.ToString;
 @Table(name = "predio", schema = "sc_agricola")
 public class PredioDTO implements java.io.Serializable {
 
-
 	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla predio", position = 1)
@@ -52,8 +53,7 @@ public class PredioDTO implements java.io.Serializable {
 	@JsonProperty("ubiId")
 	@JsonInclude(Include.NON_NULL)
 	private Long ubiId;
-	
-	
+
 	@ApiModelProperty(value = "11=activo  12=inactivo", position = 3)
 	@Column(name = "pre_estado", length = 10)
 	@JsonProperty("preEstado")
@@ -72,6 +72,6 @@ public class PredioDTO implements java.io.Serializable {
 	@JsonProperty("personaTipo")
 	@JsonInclude(Include.NON_NULL)
 	@JsonBackReference(value = "persona-tipos-predio")
-	private PersonaTipoDTO personaTipo;
+	private PersonaTipo personaTipo;
 
 }

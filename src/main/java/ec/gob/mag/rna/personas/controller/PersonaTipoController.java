@@ -2,6 +2,7 @@ package ec.gob.mag.rna.personas.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,16 @@ public class PersonaTipoController implements ErrorController {
 		List<PersonaTipo> personas = new ArrayList<PersonaTipo>();
 		personas = personaTipoService.findPersonaTipoByPerId(perId);
 		LOGGER.info("PersonaTipos findByPerId: " + personas.toString());
+		return personas;
+	}
+
+	@RequestMapping(value = "/findByPerIdAndCatTipPer/{perId}/{catTipPer}", method = RequestMethod.GET)
+	@ApiOperation(value = "Busca PersonaTipo por PerId", response = PersonaTipo.class)
+	@ResponseStatus(HttpStatus.OK)
+	public Optional<PersonaTipo> findPersonaTipoByPerId(@Valid @PathVariable Long perId, @PathVariable Long catTipPer,
+			@RequestHeader(name = "Authorization") String token) {
+		Optional<PersonaTipo> personas = personaTipoService.findByPersona_IdAndcatTipoPer(perId, catTipPer);
+		LOGGER.info("PersonaTipos findByPerIdAndCatTipPer: " + personas.toString());
 		return personas;
 	}
 
