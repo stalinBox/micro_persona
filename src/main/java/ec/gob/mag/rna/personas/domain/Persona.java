@@ -37,12 +37,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 //============== LOMBOK =============
+@Data
 @Getter
 @Setter
 @ToString(of = "id")
-//@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -353,7 +356,7 @@ public class Persona implements Serializable {
 	/********* RELACIONES JPA ************/
 	@ApiModelProperty(value = "Tipos persona")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, orphanRemoval = true)
+			CascadeType.REFRESH })
 	@JsonProperty("personaTipos")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-persona-tipos")

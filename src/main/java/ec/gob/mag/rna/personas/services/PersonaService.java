@@ -73,13 +73,21 @@ public class PersonaService {
 	 */
 	public Optional<Persona> findById(Long id) {
 		Optional<Persona> persona = personaRepository.findById(id);
-		if (!persona.isPresent()) {
+		if (persona.equals(null)) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", id.toString(),
 					this.getClass(), "findById", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
 					messageSource);
 			throw new MyNotFoundException(msg);
 		}
-		persona.get().setPersonaTipos(null);
+
+//		System.out.println("--- tamaño: " + persona.getPersonaTipos().size());
+//		persona.setPersonaTipos(persona.getPersonaTipos());
+//		persona.getPersonaTipos().stream().map(pt -> {
+////			pt.setPersona(null);
+//			pt.setPredios(null);
+//			pt.setProductor(null);
+//			return pt;
+//		}).collect(Collectors.toList());
 		return persona;
 	}
 
