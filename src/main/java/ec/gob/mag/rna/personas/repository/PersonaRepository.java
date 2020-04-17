@@ -16,6 +16,7 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 
 	Optional<Persona> findByPerIdentificacion(String perIdentificacion);
 
+	@Query("SELECT p FROM Persona p WHERE p.id=?1")
 	Optional<Persona> findById(Long id);
 
 	@SuppressWarnings("unchecked")

@@ -36,18 +36,22 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 //============== LOMBOK =============
+@Data
 @Getter
 @Setter
 @ToString(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "id")
 //========== JPA ======================
 @Entity
 @Table(name = "persona_tipo", schema = "sc_organizacion", uniqueConstraints = @UniqueConstraint(columnNames = {
