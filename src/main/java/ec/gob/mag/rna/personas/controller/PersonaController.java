@@ -69,6 +69,7 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findByPesonaTipoId/{petiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por Persona Tipo Id", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
+	@Deprecated
 	public Persona findByPerId(@Valid @PathVariable Long petiId, @RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.PesonaTipoId(petiId);
 		LOGGER.info("Persona findByPesonaTipoId: " + persona.toString());
@@ -78,6 +79,7 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findByTipo/{tipo}/{hoja}/{items}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca personas por Tipo. Devuelve paginado", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
+	@Deprecated
 	public List<Persona> findByTipo(@PathVariable Long tipo, @PathVariable Integer hoja, @PathVariable Integer items,
 			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = personaService.findByTipo(tipo, hoja, items);
@@ -99,6 +101,7 @@ public class PersonaController implements ErrorController {
 	@RequestMapping(value = "/findAllByAreasAndTipo/{tipo}/areas", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por tipo y areas", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
+	@Deprecated
 	public List<Persona> findAllByAreasAndTipo(@RequestParam(value = "areaIds", required = false) List<Long> areaIds,
 			@PathVariable Integer tipo, @RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = personaService.findByTipoAndAreasIn(tipo, areaIds);
