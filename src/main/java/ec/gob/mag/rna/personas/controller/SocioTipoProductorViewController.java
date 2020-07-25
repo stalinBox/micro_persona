@@ -64,6 +64,7 @@ public class SocioTipoProductorViewController implements ErrorController {
 	@RequestMapping(value = "/findByUbiId/{ubiId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca socios tipo productores por Id de la Ubicacion")
 	@ResponseStatus(HttpStatus.OK)
+	@Deprecated
 	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
 			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = sociotipoproductorviewService.findByUbiId(ubiId);
