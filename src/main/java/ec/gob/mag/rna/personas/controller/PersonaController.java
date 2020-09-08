@@ -3,21 +3,36 @@ package ec.gob.mag.rna.personas.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
 import ec.gob.mag.rna.personas.domain.Persona;
+import ec.gob.mag.rna.personas.domain.pagination.AppUtil;
+import ec.gob.mag.rna.personas.domain.pagination.DataTableRequest;
+import ec.gob.mag.rna.personas.domain.pagination.DataTableResults;
+import ec.gob.mag.rna.personas.domain.pagination.PaginationCriteria;
+import ec.gob.mag.rna.personas.dto.PersonaDTO;
+import ec.gob.mag.rna.personas.dto.PersonaDTOPaginated;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaService;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
@@ -45,6 +60,9 @@ public class PersonaController implements ErrorController {
 
 	@Qualifier("personaTipoService")
 	private PersonaTipoService personaTipoService;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por número de cédula", response = Persona.class)
@@ -117,6 +135,41 @@ public class PersonaController implements ErrorController {
 		Persona personaResponse = personaService.savePersona(persona);
 		LOGGER.info("Persona Create: " + personaResponse.toString());
 		return new ResponseUpdate("persona", personaResponse.getId());
+	}
+
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/findPerFuncionariosByIdRol/{rolId}", method = RequestMethod.GET)
+	@ResponseBody
+	public String listAplicationPaginated(HttpServletRequest request, HttpServletResponse response, Model model,
+			@PathVariable Long rolId, @RequestHeader(name = "Authorization") String token) {
+		DataTableRequest<PersonaDTO> dataTableInRQ = new DataTableRequest<PersonaDTO>(request);
+		PaginationCriteria pagination = dataTableInRQ.getPaginationRequest();
+		String baseQuery = "SELECT CAST(up.usup_id AS TEXT) AS \"id\", up.per_id AS \"perId\",\n"
+				+ "p.per_nombres AS \"perNombres\", p.per_cedula AS \"perCedula\",\n"
+				+ "r.rol_nombre AS \"rolNombre\",( SELECT count(DISTINCT(up.usup_login)) \n"
+				+ "FROM sc_seguridad.usuario_persona up INNER JOIN sc_organizacion.persona p ON up.per_id = p.per_id\n"
+				+ "INNER JOIN sc_seguridad_sicpas.tbl_rol_usuario ru ON ru.usup_id = up.usup_id\n"
+				+ "INNER JOIN sc_seguridad_sicpas.tbl_roles r ON ru.rol_id = r.rol_id \n" + "WHERE  ru.rol_id = "
+				+ rolId + " AND up.usup_eliminado = false and up.usup_estado = 11 ) AS totalRecords\n"
+				+ "FROM sc_seguridad.usuario_persona up INNER JOIN sc_organizacion.persona p ON up.per_id = p.per_id\n"
+				+ "INNER JOIN sc_seguridad_sicpas.tbl_rol_usuario ru ON ru.usup_id = up.usup_id\n"
+				+ "INNER JOIN sc_seguridad_sicpas.tbl_roles r ON ru.rol_id = r.rol_id \n" + "WHERE ru.rol_id = " + rolId
+				+ " AND up.usup_eliminado = false AND up.usup_estado = 11";
+		String paginatedQuery = AppUtil.buildPaginatedQuery(baseQuery, pagination);
+		Query query = entityManager.createNativeQuery(paginatedQuery, PersonaDTOPaginated.class);
+		List<PersonaDTOPaginated> userList = query.getResultList();
+		DataTableResults<PersonaDTOPaginated> dataTableResult = new DataTableResults<PersonaDTOPaginated>();
+		dataTableResult.setDraw(dataTableInRQ.getDraw());
+		dataTableResult.setListOfDataObjects(userList);
+		if (!AppUtil.isObjectEmpty(userList)) {
+			dataTableResult.setRecordsTotal(((PersonaDTOPaginated) userList.get(0)).getTotalRecords().toString());
+			if (dataTableInRQ.getPaginationRequest().isFilterByEmpty())
+				dataTableResult
+						.setRecordsFiltered(((PersonaDTOPaginated) userList.get(0)).getTotalRecords().toString());
+			else
+				dataTableResult.setRecordsFiltered(Integer.toString(userList.size()));
+		}
+		return (new Gson()).toJson(dataTableResult);
 	}
 
 	@Override
