@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import ec.gob.mag.rna.personas.domain.view.FuncionarioView;
+import ec.gob.mag.rna.personas.dto.FuncionariosDTOBdc;
 import ec.gob.mag.rna.personas.dto.ProyectoDTO;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
 import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
 import ec.gob.mag.rna.personas.services.FuncionarioService;
+import ec.gob.mag.rna.personas.services.FuncionarioDBCService;
 import ec.gob.mag.rna.personas.util.MyExceptionUtility;
 import ec.gob.mag.rna.personas.util.Util;
 import io.swagger.annotations.Api;
@@ -48,7 +50,31 @@ public class FuncionarioController implements ErrorController {
 	private FuncionarioService funcionarioService;
 
 	@Autowired
+	@Qualifier("funcionarioDBCService")
+	private FuncionarioDBCService funcionarioDBCService;
+
+	@Autowired
 	private MessageSource messageSource;
+
+	@RequestMapping(value = "/findFuncionariosBDCByidApli/{idApli}", method = RequestMethod.GET)
+	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionariosDTOBdc.class)
+	@ResponseStatus(HttpStatus.OK)
+	public List<FuncionariosDTOBdc> findFuncionariosBDCByidApli(@RequestHeader(name = "Authorization") String token,
+			@PathVariable Long idApli) {
+		List<FuncionariosDTOBdc> funcionarios = funcionarioDBCService.findFuncionarioByApliId(idApli);
+		LOGGER.info("Funcionarios findFuncionariosBDCByidApli: " + funcionarios.toString());
+		return funcionarios;
+	}
+
+	@RequestMapping(value = "/findFuncionariosBDCByidRol/{idRol}", method = RequestMethod.GET)
+	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionariosDTOBdc.class)
+	@ResponseStatus(HttpStatus.OK)
+	public List<FuncionariosDTOBdc> findFuncionariosBDCByidRol(@RequestHeader(name = "Authorization") String token,
+			@PathVariable Long idRol) {
+		List<FuncionariosDTOBdc> funcionarios = funcionarioDBCService.findFuncionarioByRolId(idRol);
+		LOGGER.info("Funcionarios findFuncionariosBDCByidRol: " + funcionarios.toString());
+		return funcionarios;
+	}
 
 	@RequestMapping(value = "/findSupervisores/{perId}/{pefIdPadre}/{pefIdHijo}/{proyId}", method = RequestMethod.GET)
 	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionarioView.class)

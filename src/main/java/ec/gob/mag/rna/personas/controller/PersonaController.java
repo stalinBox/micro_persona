@@ -138,7 +138,7 @@ public class PersonaController implements ErrorController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/findPerFuncionariosByIdRol/{rolId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/findPerFuncionariosByIdRolPaginado/{rolId}", method = RequestMethod.GET)
 	@ResponseBody
 	public String listAplicationPaginated(HttpServletRequest request, HttpServletResponse response, Model model,
 			@PathVariable Long rolId, @RequestHeader(name = "Authorization") String token) {
