@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -191,9 +192,12 @@ public class Productor implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		this.proEstado = 11;
-		this.proActFecha = null;
-		this.proActUsu = null;
 		this.proEliminado = false;
 		this.proRegFecha = new Date();
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		this.proActFecha = new Date();
 	}
 }
