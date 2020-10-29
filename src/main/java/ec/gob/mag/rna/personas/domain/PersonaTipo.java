@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -170,10 +171,12 @@ public class PersonaTipo implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		this.petiEstado = 11;
-		this.petiActFecha = null;
-		this.petiActUsu = null;
 		this.petiEliminado = false;
 		this.petiRegFecha = new Date();
 	}
 
+	@PreUpdate
+	public void preUpdate() {
+		this.petiActFecha = new Date();
+	}
 }

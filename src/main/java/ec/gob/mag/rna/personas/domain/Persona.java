@@ -365,8 +365,6 @@ public class Persona implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		this.perEstado = 11;
-		this.perActFecha = null;
-		this.perActUsu = null;
 		this.perEliminado = false;
 		this.perCedula = this.perIdentificacion;
 		this.perRegFecha = new Date();
@@ -376,6 +374,7 @@ public class Persona implements Serializable {
 	@PreUpdate
 	public void preUpdate() {
 		this.perCedula = this.perIdentificacion;
+		this.perActFecha = new Date();
 	}
 
 }
