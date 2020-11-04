@@ -41,12 +41,18 @@ public class PredioDTO implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla predio", position = 1)
 	@Id
+	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla predio", position = 1)
 	@Column(name = "pre_id", unique = true, nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonProperty("preId")
 	private Long id;
+
+	@ApiModelProperty(value = "Predio nombre", position = 8)
+	@Column(name = "pre_nombre", length = 256)
+	@JsonProperty("preNombre")
+	@JsonInclude(Include.NON_NULL)
+	private String preNombre;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla ubicacion", position = 2)
 	@Column(name = "ubi_id")
