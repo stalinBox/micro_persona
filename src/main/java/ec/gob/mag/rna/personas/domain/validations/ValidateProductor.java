@@ -1,4 +1,4 @@
-package ec.gob.mag.rna.personas.domain;
+package ec.gob.mag.rna.personas.domain.validations;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,11 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,29 +23,30 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import ec.gob.mag.rna.personas.domain.constraint.OneOfInteger;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 //============== LOMBOK =============
+@Data
 @Getter
 @Setter
 @ToString(of = "id")
-//@EqualsAndHashCode(of="id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 //========== JPA ======================
 @Entity
-@Table(name = "productor", schema = "sc_agricola")
-public class Productor implements Serializable {
+public class ValidateProductor implements Serializable {
 	private static final long serialVersionUID = -2262203418770500667L;
 
-	@Id
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla productor")
+	@Id
 	@Column(name = "pro_id", unique = true, nullable = false)
 	@JsonProperty("proId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,12 +56,15 @@ public class Productor implements Serializable {
 	@Column(name = "cat_act_economica")
 	@JsonProperty("catActEconomica")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 501, 502, 503, 504, 505, 506, 507,
+			508 }, domainShow = "[501, 502, 503, 504, 505, 506, 507, 508]")
 	private Long catActEconomica;
 
 	@ApiModelProperty(value = "Es su fuente de ingreso? SI-NO")
 	@Column(name = "cat_fuente_ingreso")
 	@JsonProperty("catFuenteIngreso")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 393, 394, 728, 729, 730, 731, 732 }, domainShow = "[393, 394, 728, 729, 730, 731, 732]")
 	private Long catFuenteIngreso;
 
 	@ApiModelProperty(value = "El productor o propietario vive en el terreno:S,N")
@@ -87,6 +89,7 @@ public class Productor implements Serializable {
 	@Column(name = "pro_reg_usu")
 	@JsonProperty("proRegUsu")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Long proRegUsu;
 
 	@ApiModelProperty(value = "Este campo almacena la fecha en la que el usuario realiza el ingreso de información")
@@ -187,17 +190,6 @@ public class Productor implements Serializable {
 	@JsonProperty("personaTipo")
 	@JsonInclude(Include.NON_NULL)
 	@JsonBackReference(value = "persona-tipos-productor")
-	private PersonaTipo personaTipo;
+	private ValidatePersonaTipo personaTipo;
 
-	@PrePersist
-	public void prePersist() {
-		this.proEstado = 11;
-		this.proEliminado = false;
-		this.proRegFecha = new Date();
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		this.proActFecha = new Date();
-	}
 }

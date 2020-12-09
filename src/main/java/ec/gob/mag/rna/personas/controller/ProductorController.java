@@ -1,5 +1,6 @@
 package ec.gob.mag.rna.personas.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +31,13 @@ import ec.gob.mag.rna.personas.domain.pagination.AppUtil;
 import ec.gob.mag.rna.personas.domain.pagination.DataTableRequest;
 import ec.gob.mag.rna.personas.domain.pagination.DataTableResults;
 import ec.gob.mag.rna.personas.domain.pagination.PaginationCriteria;
+import ec.gob.mag.rna.personas.domain.validations.ValidatePersona;
 import ec.gob.mag.rna.personas.dto.ProductoresDTO;
 import ec.gob.mag.rna.personas.dto.ProductoresDTOPaginated;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
 import ec.gob.mag.rna.personas.services.ProductorService;
+import ec.gob.mag.rna.personas.util.ConvertEntityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -64,14 +67,29 @@ public class ProductorController implements ErrorController {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	/************ METODOS SAVE *************/
+	@Autowired
+	@Qualifier("convertEntityUtil")
+	private ConvertEntityUtil convertEntityUtil;
+
+	/************
+	 * METODOS SAVE
+	 * 
+	 * @throws IOException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws SecurityException
+	 * @throws NoSuchFieldException
+	 * 
+	 *************/
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public Object createProductor(@Valid @RequestBody Persona productor,
-			@RequestHeader(name = "Authorization") String token) {
-		Object productorResponse = productorService.saveProductor(productor);
-		System.out.println("Id del Productore creado: ");
+	public Object createProductor(@Valid @RequestBody ValidatePersona productor,
+			@RequestHeader(name = "Authorization") String token) throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException, IOException {
+		Object productorB = productor;
+		Persona productorValidado = convertEntityUtil.ConvertSingleEntityGET(Persona.class, productorB);
+		Object productorResponse = productorService.saveProductor(productorValidado);
 		LOGGER.info("Productor Create: " + productorResponse.toString());
 		return productorResponse;
 	}
@@ -79,9 +97,12 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ApiOperation(value = "Crea un nuevo productor", response = ResponseUpdate.class)
 	@ResponseStatus(HttpStatus.CREATED)
-	public Object updateProductor(@Valid @RequestBody Persona productor,
-			@RequestHeader(name = "Authorization") String token) {
-		Object productorResponse = productorService.updateProductor(productor);
+	public Object updateProductor(@Valid @RequestBody ValidatePersona productor,
+			@RequestHeader(name = "Authorization") String token) throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException, IOException {
+		Object productorB = productor;
+		Persona productorValidado = convertEntityUtil.ConvertSingleEntityGET(Persona.class, productorB);
+		Object productorResponse = productorService.updateProductor(productorValidado);
 		LOGGER.info("Productor update: " + productorResponse.toString());
 		return productorResponse;
 	}
@@ -93,9 +114,9 @@ public class ProductorController implements ErrorController {
 	@RequestMapping(value = "/findByCedulaProductor/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un productor PERSONAS-PERSONATIPO-PRODUCTOR por numero de cedula", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Persona> getSPProductorByCedula(@Valid @PathVariable String cedula,
+	public Optional<Persona> getSPProductorByCedula(@Valid @PathVariable String cedula,
 			@RequestHeader(name = "Authorization") String token) {
-		List<Persona> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
+		Optional<Persona> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
 		LOGGER.info("Productor findByCedula: " + procedureProductor.toString());
 		return procedureProductor;
 	}

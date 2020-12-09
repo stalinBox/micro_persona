@@ -1,0 +1,54 @@
+{
+	"catTipoIdentificacion": 18,
+	"catGenero": 21,
+	"catEstadoCivil": 24,
+	"perNombre": "Darwin Stalin",
+	"perApellido": "Ramirez Supe",
+	"perNombres": "Darwin Stalin Ramirez Supe",
+	"perIdentificacion": "1004608771",
+	"perFechaNac": "1971-11-19",
+	"perFuente": "SIGS",
+	"perFuenteId": 0,
+	"perFuenteApli": 11,
+	"perFuenteFecha": "2018-03-12T16:56:47.722+0000",
+	"perRccondicion": "CIUDADANO",
+	"perRegUsu": 2547,
+	"perDirDomicilio": "XXXX XXXXX XXXX",
+	"perTelefono": "052445925",
+	"perCelular": "0052445925",
+	"perCorreo": "correopersoan@correo.com",
+	"catIdTipoNac": 27,
+	"perLugarNacRc": "xxxx",
+	"ubiIdDomicilio": 12454,
+	"catEtnia": 473,
+	"personaTipos": [
+		{
+			"areaId": 2,
+			"cargoId": 7,
+			"catTipoPer": 46,
+			"petiFuente": " SIGS",
+			"petiFuenteFecha": "2018-03-12T18:35:20.988+0000",
+			"petiRegUsu": 25545,
+			"productor": [
+				{
+					"catActEconomica": 502,
+					"catFuenteIngreso": 0,
+					"proRegUsu": 2121,
+					"proGrupoEspecialesMayores60": 0,
+					"proGrupoEspeciales_0_12": 0,
+					"proGrupoEspeciales_12_18": 0,
+					"proGrupoEspeciales_18_60": 0,
+					"proGrupoMayor_60": 0,
+					"proGrupo_0_12": 0,
+					"proGrupo_12_18": 0,
+					"proGrupo_18_60": 0,
+					"proNumPersonasNoRemuneradas": 0,
+					"proNumPersonasRemuneradas": 0,
+					"proNumRemuneradasTemporal": 0,
+					"proTotalManoObra": 0,
+					"proTotalRecibeBonoDesarrollo": 0
+				}
+			]
+		}
+	]
+}
