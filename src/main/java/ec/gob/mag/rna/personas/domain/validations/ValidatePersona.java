@@ -1,4 +1,4 @@
-package ec.gob.mag.rna.personas.domain;
+package ec.gob.mag.rna.personas.domain.validations;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,20 +12,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import ec.gob.mag.rna.personas.domain.constraint.CedulaVerificador;
+import ec.gob.mag.rna.personas.domain.constraint.OneOfInteger;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,9 +43,8 @@ import lombok.Setter;
 @Builder
 //========== JPA ======================
 @Entity
-@Table(name = "persona", schema = "sc_organizacion", uniqueConstraints = {
-		@UniqueConstraint(columnNames = "per_identificacion"), @UniqueConstraint(columnNames = "per_cedula") })
-public class Persona implements Serializable {
+public class ValidatePersona implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -59,19 +58,31 @@ public class Persona implements Serializable {
 	@Column(name = "cat_tipo_identificacion")
 	@JsonProperty("catTipoIdentificacion")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 18 }, domainShow = "[18]")
 	private Integer catTipoIdentificacion;
 
 	@ApiModelProperty(value = "21=masculino 22=femenino", required = true)
 	@Column(name = "cat_genero")
 	@JsonProperty("catGenero")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 21, 22 }, domainShow = "[21, 22]")
 	private Integer catGenero;
 
 	@ApiModelProperty(value = "23=soltero 24=casado 25=divorciado.", required = true)
 	@Column(name = "cat_estado_civil")
 	@JsonProperty("catEstadoCivil")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 23, 24, 25, 26, 300, 362 }, domainShow = "[23, 24, 25, 26, 300, 362]")
 	private Integer catEstadoCivil;
+
+	@ApiModelProperty(value = "Campo que almacena el numero de cedula de la persona", required = true)
+	@Column(name = "per_identificacion", unique = true, length = 30)
+	@JsonProperty("perIdentificacion")
+	@JsonInclude(Include.NON_NULL)
+	@CedulaVerificador
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
+	private String perIdentificacion;
 
 	@ApiModelProperty(value = "Profesiones que tenga la persona", required = false)
 	@Column(name = "cat_titulo")
@@ -101,12 +112,15 @@ public class Persona implements Serializable {
 	@Column(name = "cat_id_tipo_nac")
 	@JsonProperty("catIdTipoNac")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 27, 344 }, domainShow = "[27, 344]")
 	private Integer catIdTipoNac;
 
 	@ApiModelProperty(value = "Indígena, Blanco, Mestizo, Montubio, Afroecuatoriano", required = true)
 	@Column(name = "cat_etnia")
 	@JsonProperty("catEtnia")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 473, 474, 475, 476, 477,
+			877 }, domainShow = "[473, 474, 475, 476, 477, 877]", ignoreCase = true)
 	private Integer catEtnia;
 
 	@ApiModelProperty(value = "Categoria de pueblo indigena", required = false)
@@ -119,31 +133,31 @@ public class Persona implements Serializable {
 	@Column(name = "per_nombre", length = 50)
 	@JsonProperty("perNombre")
 	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perNombre;
 
 	@ApiModelProperty(value = "Campo que almacena el apellido de la persona", required = true)
 	@Column(name = "per_apellido", length = 50)
 	@JsonProperty("perApellido")
 	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perApellido;
 
 	@ApiModelProperty(value = "Campo que almacena los nombres de la persona", required = false)
 	@Column(name = "per_nombres", length = 100)
 	@JsonProperty("perNombres")
 	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perNombres;
 
-	@ApiModelProperty(value = "Campo que almacena el numero de cedula de la persona", required = true)
-	@Column(name = "per_identificacion", unique = true, length = 30)
-	@JsonProperty("perIdentificacion")
-	@JsonInclude(Include.NON_NULL)
-	private String perIdentificacion;
-
 	@ApiModelProperty(value = "Campo que almacena la fecha de nacimiento del persona", required = false)
-	@Temporal(TemporalType.DATE)
 	@Column(name = "per_fecha_nac", length = 13)
 	@JsonProperty("perFechaNac")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Date perFechaNac;
 
 	@ApiModelProperty(value = "Tipo de sangre de la persona", required = false)
@@ -156,6 +170,8 @@ public class Persona implements Serializable {
 	@Column(name = "per_fuente", length = 16)
 	@JsonProperty("perFuente")
 	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perFuente;
 
 	@ApiModelProperty(value = "Identificación del origen de la migracion", required = false)
@@ -168,19 +184,22 @@ public class Persona implements Serializable {
 	@Column(name = "per_fuente_apli")
 	@JsonProperty("perFuenteApli")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Integer perFuenteApli;
 
-	@ApiModelProperty(value = "Fecha de migracion", required = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "per_fuente_fecha", length = 29)
+	@ApiModelProperty(value = "Fecha de migracion")
+	@Column(name = "per_fuente_fecha", length = 13)
 	@JsonProperty("perFuenteFecha")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Date perFuenteFecha;
 
 	@ApiModelProperty(value = "Desde Rcivil: CIUDADANO,FALLECIDO,EXTRANJERO,MENOR DE EDAD,POLICIA,MILITAR..", required = false, allowableValues = "CIUDADANO, FALLECIDO, EXTRANJERO, MENOR DE EDAD, POLICIA, MILITAR")
 	@Column(name = "per_rccondicion", length = 56)
 	@JsonProperty("perRccondicion")
 	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perRccondicion;
 
 	@ApiModelProperty(value = "11=activo  12=inactivo", required = true, allowableValues = "11=>activo, 12=>inactivo ....")
@@ -199,10 +218,10 @@ public class Persona implements Serializable {
 	@Column(name = "per_reg_usu")
 	@JsonProperty("perRegUsu")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Integer perRegUsu;
 
 	@ApiModelProperty(value = "Este campo almacena la fecha en la que el usuario realiza el ingreso de información", hidden = true)
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "per_reg_fecha", length = 29)
 	@JsonProperty("perRegFecha")
 	@JsonInclude(Include.NON_NULL)
@@ -215,7 +234,6 @@ public class Persona implements Serializable {
 	private Integer perActUsu;
 
 	@ApiModelProperty(value = "Este campo almacena la fecha en la que hizo la actualización el usuario", readOnly = true)
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "per_act_fecha", length = 29)
 	@JsonProperty("perActFecha")
 	@JsonInclude(Include.NON_NULL)
@@ -225,6 +243,7 @@ public class Persona implements Serializable {
 	@Column(name = "ubi_id_domicilio")
 	@JsonProperty("ubiIdDomicilio")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Long ubiIdDomicilio;
 
 	@ApiModelProperty(value = "Dirección del domicilio de la persona")
@@ -243,6 +262,8 @@ public class Persona implements Serializable {
 	@Column(name = "per_celular", length = 64)
 	@JsonProperty("perCelular")
 	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perCelular;
 
 	@ApiModelProperty(value = "Correo o email de la persona")
@@ -250,6 +271,8 @@ public class Persona implements Serializable {
 	@JsonProperty("perCorreo")
 	@JsonInclude(Include.NON_NULL)
 	@Email(message = "_error.validation_valid_mail.message")
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perCorreo;
 
 	@ApiModelProperty(value = "Fecha de defunción de la persona")
@@ -309,13 +332,16 @@ public class Persona implements Serializable {
 	@ApiModelProperty(value = "Lugar Nacimiento de la persona")
 	@Column(name = "per_lugar_nac_rc", length = 512)
 	@JsonProperty("perLugarNacRc")
-//	@JsonInclude(Include.NON_NULL)
+	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String perLugarNacRc;
 
 	@ApiModelProperty(value = "Instruccion de formal de la persona")
 	@Column(name = "cat_instruccion_formal")
 	@JsonProperty("catInstruccionFormal")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 253, 254, 256, 252 }, domainShow = "[253, 254, 256, 252]", ignoreCase = true)
 	private Integer catInstruccionFormal;
 
 	@ApiModelProperty(value = "Año de Instruccion de formal de la persona")
@@ -345,27 +371,10 @@ public class Persona implements Serializable {
 	/********* RELACIONES JPA ************/
 	@ApiModelProperty(value = "Tipos persona")
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "persona", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH })
+			CascadeType.REFRESH }, orphanRemoval = true)
 	@JsonProperty("personaTipos")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-persona-tipos")
-	private List<PersonaTipo> personaTipos;
-
-	@PrePersist
-	public void prePersist() {
-		this.perEstado = 11;
-		this.perEliminado = false;
-		this.perCedula = this.perIdentificacion;
-		this.perRegFecha = new Date();
-		this.perRuc = this.perIdentificacion + "001";
-//		this.perFuenteFecha = new Date();
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		this.perCedula = this.perIdentificacion;
-		this.perActFecha = new Date();
-//		this.perFuenteFecha = new Date();
-	}
+	private List<ValidatePersonaTipo> personaTipos;
 
 }

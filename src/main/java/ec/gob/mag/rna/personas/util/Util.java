@@ -1,5 +1,6 @@
 package ec.gob.mag.rna.personas.util;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -17,16 +18,51 @@ import ec.gob.mag.rna.personas.domain.PersonaTipo;
 
 public class Util {
 
+	public static void copyObject(Object src, Object dest)
+			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		for (Field field : src.getClass().getFields()) {
+			dest.getClass().getField(field.getName()).set(dest, field.get(src));
+		}
+	}
+
+	/**
+	 * METODO PARA VERIFICAR LA CEDULA DE CIUDADANIA ECUATORIANA
+	 * 
+	 * @param cedula
+	 * @return boolean
+	 */
+	public boolean verificarCedula(String cedula) {
+		int total = 0;
+		int tamanoLongitudCedula = 10;
+		int[] coeficientes = { 2, 1, 2, 1, 2, 1, 2, 1, 2 };
+		int numeroProviancias = 24;
+		int tercerdigito = 6;
+		if (cedula.matches("[0-9]*") && cedula.length() == tamanoLongitudCedula) {
+			int provincia = Integer.parseInt(cedula.charAt(0) + "" + cedula.charAt(1));
+			int digitoTres = Integer.parseInt(cedula.charAt(2) + "");
+			if ((provincia > 0 && provincia <= numeroProviancias) && digitoTres < tercerdigito) {
+				int digitoVerificadorRecibido = Integer.parseInt(cedula.charAt(9) + "");
+				for (int i = 0; i < coeficientes.length; i++) {
+					int valor = Integer.parseInt(coeficientes[i] + "") * Integer.parseInt(cedula.charAt(i) + "");
+					total = valor >= 10 ? total + (valor - 9) : total + valor;
+				}
+				int digitoVerificadorObtenido = total >= 10 ? (total % 10) != 0 ? 10 - (total % 10) : (total % 10)
+						: total;
+				if (digitoVerificadorObtenido == digitoVerificadorRecibido) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
+	}
+
 	public static String cleanBlanks(String str) {
 		str = str.replaceAll(" +", " ");
 		str = str.trim();
 		return str;
 	}
 
-	/**
-	 * @author Paul Cuichan
-	 * 
-	 */
 	public static int randomBetween(int start, int end) {
 		int dif = end - start;
 		if (dif > 0) {
@@ -79,7 +115,6 @@ public class Util {
 			List<PersonaTipo> personasTipo = new ArrayList<>();
 			PersonaTipo personaTipo = new PersonaTipo();
 			personaTipo.setId(productor.getPetiId());
-//			personaTipo.setAreaId(productor.getAreaId());
 			personasTipo.add(personaTipo);
 			persona.setPersonaTipos(personasTipo);
 

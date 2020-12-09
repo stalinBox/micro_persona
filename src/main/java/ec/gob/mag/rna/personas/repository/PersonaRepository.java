@@ -39,5 +39,5 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 	@Query("SELECT p FROM PersonaTipo pt LEFT JOIN Productor pr ON pt.id = pr.personaTipo "
 			+ "INNER JOIN Persona p ON p.id = pt.persona WHERE p.perIdentificacion=?1 AND "
 			+ "pt.petiEstado = 11 AND pt.petiEliminado = FALSE AND pt.catTipoPer=46")
-	List<Persona> findByperIdentificacion(String identificacion);
+	Optional<Persona> findByperIdentificacion(String identificacion);
 }

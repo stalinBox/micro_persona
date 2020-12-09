@@ -107,9 +107,9 @@ public class ProductorService {
 		return personaRepository.save(persona);
 	}
 
-	public List<Persona> findProductorSPByIdentificacion(String identificacion) {
-		List<Persona> productor = personaRepository.findByperIdentificacion(identificacion);
-		if (productor == null || productor.size() == 0) {
+	public Optional<Persona> findProductorSPByIdentificacion(String identificacion) {
+		Optional<Persona> productor = personaRepository.findByperIdentificacion(identificacion);
+		if (!productor.isPresent()) {
 			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
 					identificacion.toString(), this.getClass(), "findProductorByIdentificacion",
 					EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);

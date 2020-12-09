@@ -1,9 +1,8 @@
-package ec.gob.mag.rna.personas.domain;
+package ec.gob.mag.rna.personas.domain.validations;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,11 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import ec.gob.mag.rna.personas.dto.PredioDTO;
+import ec.gob.mag.rna.personas.domain.constraint.OneOfInteger;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -54,8 +52,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "id")
 //========== JPA ======================
 @Entity
-@Table(name = "persona_tipo", schema = "sc_organizacion")
-public class PersonaTipo implements Serializable {
+public class ValidatePersonaTipo implements Serializable {
 	private static final long serialVersionUID = 5797912094414225146L;
 
 	@Id
@@ -69,18 +66,21 @@ public class PersonaTipo implements Serializable {
 	@JsonProperty("areaId")
 	@Column(name = "area_id", nullable = false)
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 2 }, domainShow = "[2]")
 	private Long areaId;
 
 	@ApiModelProperty(value = "tabla cargo_puesto Ejemplo: 1=Coord.Proy 2=Lider de area 3=Analista Sistemas 4=Funcionario MAG..")
 	@Column(name = "carg_id", nullable = false)
 	@JsonProperty("cargoId")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 7 }, domainShow = "[7]")
 	private Long cargoId;
 
 	@ApiModelProperty(value = "45=Funcionario 46=Ciudadano ...")
 	@Column(name = "cat_tipo_per")
 	@JsonProperty("catTipoPer")
 	@JsonInclude(Include.NON_NULL)
+	@OneOfInteger(value = { 46 }, domainShow = "[46]")
 	private Long catTipoPer;
 
 	@ApiModelProperty(value = "Comentarios observaciones")
@@ -93,6 +93,8 @@ public class PersonaTipo implements Serializable {
 	@Column(name = "peti_fuente", length = 16)
 	@JsonProperty("petiFuente")
 	@JsonInclude(Include.NON_NULL)
+	@NotBlank(message = "_error.field_notBlank_constraint.message")
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private String petiFuente;
 
 	@ApiModelProperty(value = "Fecha de migración de datos")
@@ -100,6 +102,7 @@ public class PersonaTipo implements Serializable {
 	@Column(name = "peti_fuente_fecha", length = 29)
 	@JsonProperty("petiFuenteFecha")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Date petiFuenteFecha;
 
 	@ApiModelProperty(value = "11=activo  12=inactivo")
@@ -118,6 +121,7 @@ public class PersonaTipo implements Serializable {
 	@Column(name = "peti_reg_usu")
 	@JsonProperty("petiRegUsu")
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "_error.field_notnull_constraint.message")
 	private Integer petiRegUsu;
 
 	@ApiModelProperty(value = "Este campo almacena la fecha en la que el usuario realiza el ingreso de información")
@@ -149,14 +153,7 @@ public class PersonaTipo implements Serializable {
 	@JsonProperty("productor")
 	@JsonInclude(Include.NON_NULL)
 	@JsonManagedReference(value = "persona-tipos-productor")
-	private List<Productor> productor;
-
-	@ApiModelProperty(value = "Campo predio")
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "personaTipo")
-	@JsonProperty("predios")
-	@JsonInclude(Include.NON_NULL)
-	@JsonManagedReference(value = "persona-tipos-predio")
-	private Set<PredioDTO> predios;
+	private List<ValidateProductor> productor;
 
 	@ApiModelProperty(value = "Este campo es  la clave primaria de la tabla Persona")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -164,17 +161,5 @@ public class PersonaTipo implements Serializable {
 	@JsonProperty("persona")
 	@JsonInclude(Include.NON_NULL)
 	@JsonBackReference(value = "persona-persona-tipos")
-	private Persona persona;
-
-	@PrePersist
-	public void prePersist() {
-		this.petiEstado = 11;
-		this.petiEliminado = false;
-		this.petiRegFecha = new Date();
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		this.petiActFecha = new Date();
-	}
+	private ValidatePersona persona;
 }
