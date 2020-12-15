@@ -58,14 +58,14 @@ public class ValidateProductor implements Serializable {
 	@JsonInclude(Include.NON_NULL)
 	@OneOfInteger(value = { 501, 502, 503, 504, 505, 506, 507,
 			508 }, domainShow = "[501, 502, 503, 504, 505, 506, 507, 508]")
-	private Long catActEconomica;
+	private Integer catActEconomica;
 
 	@ApiModelProperty(value = "Es su fuente de ingreso? SI-NO")
 	@Column(name = "cat_fuente_ingreso")
 	@JsonProperty("catFuenteIngreso")
 	@JsonInclude(Include.NON_NULL)
 	@OneOfInteger(value = { 393, 394, 728, 729, 730, 731, 732 }, domainShow = "[393, 394, 728, 729, 730, 731, 732]")
-	private Long catFuenteIngreso;
+	private Integer catFuenteIngreso;
 
 	@ApiModelProperty(value = "El productor o propietario vive en el terreno:S,N")
 	@Column(name = "pro_vive_terreno", length = 1)

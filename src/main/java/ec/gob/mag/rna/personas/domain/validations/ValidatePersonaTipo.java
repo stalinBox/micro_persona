@@ -67,21 +67,21 @@ public class ValidatePersonaTipo implements Serializable {
 	@Column(name = "area_id", nullable = false)
 	@JsonInclude(Include.NON_NULL)
 	@OneOfInteger(value = { 2 }, domainShow = "[2]")
-	private Long areaId;
+	private Integer areaId;
 
 	@ApiModelProperty(value = "tabla cargo_puesto Ejemplo: 1=Coord.Proy 2=Lider de area 3=Analista Sistemas 4=Funcionario MAG..")
 	@Column(name = "carg_id", nullable = false)
 	@JsonProperty("cargoId")
 	@JsonInclude(Include.NON_NULL)
 	@OneOfInteger(value = { 7 }, domainShow = "[7]")
-	private Long cargoId;
+	private Integer cargoId;
 
 	@ApiModelProperty(value = "45=Funcionario 46=Ciudadano ...")
 	@Column(name = "cat_tipo_per")
 	@JsonProperty("catTipoPer")
 	@JsonInclude(Include.NON_NULL)
 	@OneOfInteger(value = { 46 }, domainShow = "[46]")
-	private Long catTipoPer;
+	private Integer catTipoPer;
 
 	@ApiModelProperty(value = "Comentarios observaciones")
 	@Column(name = "peti_observacion", length = 150)
