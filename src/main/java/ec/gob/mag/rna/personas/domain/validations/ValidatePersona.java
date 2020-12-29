@@ -253,13 +253,13 @@ public class ValidatePersona implements Serializable {
 	private String perDirDomicilio;
 
 	@ApiModelProperty(value = "Número de Teléfono de la persona")
-	@Column(name = "per_telefono", length = 64)
+	@Column(name = "per_telefono", length = 10)
 	@JsonProperty("perTelefono")
 	@JsonInclude(Include.NON_NULL)
 	private String perTelefono;
 
 	@ApiModelProperty(value = "Número de Celular de la persona")
-	@Column(name = "per_celular", length = 64)
+	@Column(name = "per_celular", length = 10)
 	@JsonProperty("perCelular")
 	@JsonInclude(Include.NON_NULL)
 	@NotBlank(message = "_error.field_notBlank_constraint.message")
