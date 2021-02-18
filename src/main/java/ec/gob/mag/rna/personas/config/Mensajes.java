@@ -1,4 +1,4 @@
-package ec.gob.mag.rna.personas;
+package ec.gob.mag.rna.personas.config;
 
 
 import org.springframework.context.annotation.Bean;
