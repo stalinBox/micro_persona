@@ -115,6 +115,9 @@ public class ProductorService {
 					EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
 			throw new MyNotFoundException(msg);
 		}
+		List<PersonaTipo> personatipo = productor.get().getPersonaTipos().stream().filter(f -> f.getCatTipoPer() == 46)
+				.collect(Collectors.toList());
+		productor.get().setPersonaTipos(personatipo);
 		return productor;
 	}
 
