@@ -3,20 +3,73 @@ package ec.gob.mag.rna.personas.util;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
+import org.springframework.stereotype.Component;
 
-import ec.gob.mag.rna.personas.domain.Persona;
-import ec.gob.mag.rna.personas.domain.PersonaTipo;
-
+@Component("util")
 public class Util {
+
+	public static String decodeJWTHeader(String jwtToken) {
+		String[] splitToken = jwtToken.split("\\.");
+		String encodedHeader = splitToken[0];
+		Base64 base64Url = new Base64(true);
+		String header = new String(base64Url.decode(encodedHeader));
+		return header;
+	}
+
+	public String decodeJWTBody(String jwtToken) {
+		String[] splitToken = jwtToken.split("\\.");
+		String encodedBody = splitToken[1];
+		Base64 base64Url = new Base64(true);
+		String body = new String(base64Url.decode(encodedBody));
+		return body;
+
+	}
+
+	public String decodeJWTSignature(String jwtToken) {
+		String[] splitToken = jwtToken.split("\\.");
+		String encodedSignature = splitToken[2];
+		Base64 base64Url = new Base64(true);
+		String signature = new String(base64Url.decode(encodedSignature));
+		return signature;
+	}
+
+	public String filterUsuId(String token) {
+		JSONObject data = new JSONObject(decodeJWTBody(token));
+		String usuarios = checkKey(data, "usuarios").toString();
+		JSONObject dataInto = new JSONObject(usuarios.substring(1, usuarios.length() - 1));
+		return checkKey(dataInto, "usuId").toString();
+	}
+
+	public Object checkKey(JSONObject JsonObj, String searchedKey) {
+		boolean exists = JsonObj.has(searchedKey);
+		Object obj = null;
+		if (JsonObj.isNull(searchedKey)) {
+			return searchedKey = "";
+		} else {
+			if (exists) {
+				obj = JsonObj.get(searchedKey);
+			}
+			if (!exists) {
+				Set<String> keys = JsonObj.keySet();
+				for (String key : keys) {
+					if (JsonObj.get(key) instanceof JSONObject) {
+						obj = checkKey((JSONObject) JsonObj.get(key), searchedKey);
+					}
+				}
+			}
+			return obj;
+		}
+
+	}
 
 	public static void copyObject(Object src, Object dest)
 			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -88,46 +141,6 @@ public class Util {
 		Date dateIn = new Date();
 		LocalDateTime ldt = LocalDateTime.ofInstant(dateIn.toInstant(), ZoneId.systemDefault());
 		return Date.from(ldt.atZone(ZoneId.of("UTC-05:00")).toInstant());
-	}
-
-	public static Persona parseToPersona(Persona productor) {
-		if (productor == null)
-			return null;
-		Persona persona = new Persona();
-		if (productor != null) {
-			persona.setId(productor.getId());
-			persona.setPerActFecha(productor.getPerActFecha());
-			persona.setPerApellido(productor.getPerApellido());
-			persona.setPerCedula(productor.getPerCedula());
-			persona.setPerCelular(productor.getPerCelular());
-			persona.setPerCorreo(productor.getPerCorreo());
-			persona.setPerDirDomicilio(productor.getPerDirDomicilio());
-			persona.setPerFechaNac(productor.getPerFechaNac());
-			persona.setPerIdentificacion(productor.getPerIdentificacion());
-			persona.setPerLugarNacRc(productor.getPerLugarNacRc());
-			persona.setPerNombre(productor.getPerNombre());
-			persona.setPerNombres(productor.getPerNombres());
-			persona.setPerRegFecha(productor.getPerRegFecha());
-			persona.setPerTelefono(productor.getPerTelefono());
-			persona.setPerTipoContrSri(productor.getPerTipoContrSri());
-			persona.setUbiIdDomicilio(productor.getUbiIdDomicilio());
-			persona.setTipoProductor(productor.getTipoProductor());
-			List<PersonaTipo> personasTipo = new ArrayList<>();
-			PersonaTipo personaTipo = new PersonaTipo();
-			personaTipo.setId(productor.getPetiId());
-			personasTipo.add(personaTipo);
-			persona.setPersonaTipos(personasTipo);
-
-		}
-		return persona;
-	}
-
-	public static List<Persona> parseToListPersona(List<Persona> productores) {
-		if (productores == null)
-			return null;
-		return productores.stream().map(p -> {
-			return parseToPersona(p);
-		}).collect(Collectors.toList());
 	}
 
 	public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
