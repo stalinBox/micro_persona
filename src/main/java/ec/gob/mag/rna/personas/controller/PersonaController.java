@@ -36,6 +36,7 @@ import ec.gob.mag.rna.personas.dto.PersonaDTOPaginated;
 import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaService;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
+import ec.gob.mag.rna.personas.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -64,13 +65,17 @@ public class PersonaController implements ErrorController {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@Autowired
+	@Qualifier("util")
+	private Util util;
+
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca persona por número de cédula", response = Persona.class)
 	@ResponseStatus(HttpStatus.OK)
 	public Persona getPersonaByCedula(@Valid @PathVariable String cedula,
 			@RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.findByPerIdentificacion(cedula);
-		LOGGER.info("Persona findByCedula: " + persona.toString());
+		LOGGER.info("Persona findByCedula: " + persona.toString() + " usuario: " + util.filterUsuId(token));
 		return persona;
 	}
 
@@ -80,7 +85,7 @@ public class PersonaController implements ErrorController {
 	public Optional<Persona> getPersonaById(@Valid @PathVariable Long id,
 			@RequestHeader(name = "Authorization") String token) {
 		Optional<Persona> persona = personaService.findById(id);
-		LOGGER.info("Persona findById: " + persona.toString());
+		LOGGER.info("Persona findById: " + persona.toString() + " usuario: " + util.filterUsuId(token));
 		return persona;
 	}
 
@@ -90,7 +95,7 @@ public class PersonaController implements ErrorController {
 	@Deprecated
 	public Persona findByPerId(@Valid @PathVariable Long petiId, @RequestHeader(name = "Authorization") String token) {
 		Persona persona = personaService.PesonaTipoId(petiId);
-		LOGGER.info("Persona findByPesonaTipoId: " + persona.toString());
+		LOGGER.info("Persona findByPesonaTipoId: " + persona.toString() + " usuario: " + util.filterUsuId(token));
 		return persona;
 	}
 
@@ -101,7 +106,7 @@ public class PersonaController implements ErrorController {
 	public List<Persona> findByTipo(@PathVariable Long tipo, @PathVariable Integer hoja, @PathVariable Integer items,
 			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = personaService.findByTipo(tipo, hoja, items);
-		LOGGER.info("Personas findByTipo: " + personas.toString());
+		LOGGER.info("Personas findByTipo: " + personas.toString() + " usuario: " + util.filterUsuId(token));
 		return personas;
 	}
 
@@ -123,7 +128,7 @@ public class PersonaController implements ErrorController {
 	public List<Persona> findAllByAreasAndTipo(@RequestParam(value = "areaIds", required = false) List<Long> areaIds,
 			@PathVariable Integer tipo, @RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = personaService.findByTipoAndAreasIn(tipo, areaIds);
-		LOGGER.info("Persona findAllByAreasAndTipo: " + personas.toString());
+		LOGGER.info("Persona findAllByAreasAndTipo: " + personas.toString() + " usuario: " + util.filterUsuId(token));
 		return personas;
 	}
 
@@ -133,7 +138,7 @@ public class PersonaController implements ErrorController {
 	public ResponseUpdate createPersona(@Valid @RequestBody Persona persona,
 			@RequestHeader(name = "Authorization") String token) {
 		Persona personaResponse = personaService.savePersona(persona);
-		LOGGER.info("Persona Create: " + personaResponse.toString());
+		LOGGER.info("Persona Create: " + personaResponse.toString() + " usuario: " + util.filterUsuId(token));
 		return new ResponseUpdate("persona", personaResponse.getId());
 	}
 
@@ -169,6 +174,7 @@ public class PersonaController implements ErrorController {
 			else
 				dataTableResult.setRecordsFiltered(Integer.toString(userList.size()));
 		}
+		LOGGER.info("findPerFuncionariosByIdRolPaginado usuario: " + util.filterUsuId(token));
 		return (new Gson()).toJson(dataTableResult);
 	}
 

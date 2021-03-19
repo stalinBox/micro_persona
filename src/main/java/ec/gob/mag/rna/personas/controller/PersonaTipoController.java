@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ec.gob.mag.rna.personas.domain.PersonaTipo;
 import ec.gob.mag.rna.personas.dto.ArrayIdRequest;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
+import ec.gob.mag.rna.personas.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -42,6 +43,10 @@ public class PersonaTipoController implements ErrorController {
 	@Qualifier("personaTipoService")
 	private PersonaTipoService personaTipoService;
 
+	@Autowired
+	@Qualifier("util")
+	private Util util;
+
 	@RequestMapping(value = "/findByListId/{petiIds}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca PersonaTipos tipos por Ids", response = PersonaTipo.class)
 	@ResponseStatus(HttpStatus.OK)
@@ -49,7 +54,7 @@ public class PersonaTipoController implements ErrorController {
 			@RequestHeader(name = "Authorization") String token) {
 		List<PersonaTipo> personas = null;
 		personas = personaTipoService.findByListId(ids);
-		LOGGER.info("PersonaTipo findByListId: " + personas.toString());
+		LOGGER.info("PersonaTipo findByListId: " + personas.toString() + " usuario: " + util.filterUsuId(token));
 		return personas;
 	}
 
@@ -60,7 +65,7 @@ public class PersonaTipoController implements ErrorController {
 			@RequestHeader(name = "Authorization") String token) {
 		List<PersonaTipo> personas = new ArrayList<PersonaTipo>();
 		personas = personaTipoService.findPersonaTipoByPerId(perId);
-		LOGGER.info("PersonaTipos findByPerId: " + personas.toString());
+		LOGGER.info("PersonaTipos findByPerId: " + personas.toString() + " usuario: " + util.filterUsuId(token));
 		return personas;
 	}
 
@@ -70,7 +75,8 @@ public class PersonaTipoController implements ErrorController {
 	public Optional<PersonaTipo> findPersonaTipoByPerId(@Valid @PathVariable Long perId, @PathVariable Long catTipPer,
 			@RequestHeader(name = "Authorization") String token) {
 		Optional<PersonaTipo> personas = personaTipoService.findByPersona_IdAndcatTipoPer(perId, catTipPer);
-		LOGGER.info("PersonaTipos findByPerIdAndCatTipPer: " + personas.toString());
+		LOGGER.info("PersonaTipos findByPerIdAndCatTipPer: " + personas.toString() + " usuario: "
+				+ util.filterUsuId(token));
 		return personas;
 	}
 
@@ -81,7 +87,7 @@ public class PersonaTipoController implements ErrorController {
 			@RequestHeader(name = "Authorization") String token) {
 		List<PersonaTipo> personas = new ArrayList<PersonaTipo>();
 		personas = personaTipoService.findByAreaId(areaId);
-		LOGGER.info("PersonaTipos findByPerId: " + personas.toString());
+		LOGGER.info("PersonaTipos findByPerId: " + personas.toString() + " usuario: " + util.filterUsuId(token));
 		return personas;
 	}
 

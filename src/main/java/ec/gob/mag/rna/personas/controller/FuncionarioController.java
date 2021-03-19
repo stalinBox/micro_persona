@@ -56,13 +56,18 @@ public class FuncionarioController implements ErrorController {
 	@Autowired
 	private MessageSource messageSource;
 
+	@Autowired
+	@Qualifier("util")
+	private Util util;
+
 	@RequestMapping(value = "/findFuncionariosBDCByidApli/{idApli}", method = RequestMethod.GET)
 	@ApiOperation(value = "Devuelve el listado de todos los funcionarios", response = FuncionariosDTOBdc.class)
 	@ResponseStatus(HttpStatus.OK)
 	public List<FuncionariosDTOBdc> findFuncionariosBDCByidApli(@RequestHeader(name = "Authorization") String token,
 			@PathVariable Long idApli) {
 		List<FuncionariosDTOBdc> funcionarios = funcionarioDBCService.findFuncionarioByApliId(idApli);
-		LOGGER.info("Funcionarios findFuncionariosBDCByidApli: " + funcionarios.toString());
+		LOGGER.info("Funcionarios findFuncionariosBDCByidApli: " + funcionarios.toString() + " usuario: "
+				+ util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -72,7 +77,8 @@ public class FuncionarioController implements ErrorController {
 	public List<FuncionariosDTOBdc> findFuncionariosBDCByidRol(@RequestHeader(name = "Authorization") String token,
 			@PathVariable Long idRol) {
 		List<FuncionariosDTOBdc> funcionarios = funcionarioDBCService.findFuncionarioByRolId(idRol);
-		LOGGER.info("Funcionarios findFuncionariosBDCByidRol: " + funcionarios.toString());
+		LOGGER.info("Funcionarios findFuncionariosBDCByidRol: " + funcionarios.toString() + " usuario: "
+				+ util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -84,7 +90,7 @@ public class FuncionarioController implements ErrorController {
 			@PathVariable Long proyId) {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findSupervidor(perId, pefIdPadre, pefIdHijo, proyId);
-		LOGGER.info("Funcionarios findAll: " + funcionarios.toString());
+		LOGGER.info("Funcionarios findAll: " + funcionarios.toString() + " usuario: " + util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -94,7 +100,7 @@ public class FuncionarioController implements ErrorController {
 	public List<FuncionarioView> findAll(@RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findAll();
-		LOGGER.info("Funcionarios findAll: " + funcionarios.toString());
+		LOGGER.info("Funcionarios findAll: " + funcionarios.toString() + " usuario: " + util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -105,7 +111,8 @@ public class FuncionarioController implements ErrorController {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findAll();
 		funcionarios = funcionarios.stream().filter(Util.distinctByKey(f -> f.getPerId())).collect(Collectors.toList());
-		LOGGER.info("Funcionarios findDistinctAll: " + funcionarios.toString());
+		LOGGER.info(
+				"Funcionarios findDistinctAll: " + funcionarios.toString() + " usuario: " + util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -114,7 +121,7 @@ public class FuncionarioController implements ErrorController {
 	@ResponseStatus(HttpStatus.OK)
 	public FuncionarioView findById(@PathVariable Long id, @RequestHeader(name = "Authorization") String token) {
 		FuncionarioView funcionario = funcionarioService.findById(id);
-		LOGGER.info("Funcionario findById: " + funcionario.toString());
+		LOGGER.info("Funcionario findById: " + funcionario.toString() + " usuario: " + util.filterUsuId(token));
 		return funcionario;
 	}
 
@@ -124,7 +131,7 @@ public class FuncionarioController implements ErrorController {
 	public FuncionarioView findByCedula(@PathVariable String cedula,
 			@RequestHeader(name = "Authorization") String token) {
 		FuncionarioView funcionario = funcionarioService.findByPerIdentificacion(cedula);
-		LOGGER.info("Funcionario findByCedula: " + funcionario.toString());
+		LOGGER.info("Funcionario findByCedula: " + funcionario.toString() + " usuario: " + util.filterUsuId(token));
 		return funcionario;
 	}
 
@@ -148,7 +155,8 @@ public class FuncionarioController implements ErrorController {
 			throw new MyNotFoundException(msg);
 		}
 
-		LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefIdPadreTpefIdHijos: " + funcionarios.toString());
+		LOGGER.info("Funcionarios findByPerIdAndProyIdAndTpefIdPadreTpefIdHijos: " + funcionarios.toString()
+				+ " usuario: " + util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -160,7 +168,8 @@ public class FuncionarioController implements ErrorController {
 			@RequestHeader(name = "Authorization") String token) {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findByProyIdAndPefId(proyId, pefId);
-		LOGGER.info("Funcionarios findByProyIdAndPefId: " + funcionarios.toString());
+		LOGGER.info("Funcionarios findByProyIdAndPefId: " + funcionarios.toString() + " usuario: "
+				+ util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -173,7 +182,8 @@ public class FuncionarioController implements ErrorController {
 		List<FuncionarioView> funcionarios = null;
 		funcionarios = funcionarioService.findByProyIdAndPefId(proyId, pefId);
 		funcionarios = funcionarios.stream().filter(Util.distinctByKey(f -> f.getPerId())).collect(Collectors.toList());
-		LOGGER.info("Funcionarios findDistinctByProyIdAndTpefId: " + funcionarios.toString());
+		LOGGER.info("Funcionarios findDistinctByProyIdAndTpefId: " + funcionarios.toString() + " usuario: "
+				+ util.filterUsuId(token));
 		return funcionarios;
 	}
 
@@ -188,7 +198,8 @@ public class FuncionarioController implements ErrorController {
 		FuncionarioView pfu = funcionarioService.findByPerIdAndProyIdAndPefId(perId, proyId, pefIdHijo);
 		// consulta el registro padre
 		FuncionarioView f = funcionarioService.findByUpsIdAndPefId(pfu.getUpsIdPadre(), pefIdPadre);
-		LOGGER.info("Funcionario findPadreByPerIdAndProyIdAndTpefIdHijoAndTpefIdPadre: " + pfu.toString());
+		LOGGER.info("Funcionario findPadreByPerIdAndProyIdAndTpefIdHijoAndTpefIdPadre: " + pfu.toString() + " usuario: "
+				+ util.filterUsuId(token));
 		return f;
 	}
 
@@ -199,14 +210,9 @@ public class FuncionarioController implements ErrorController {
 			@PathVariable Long proyId, @PathVariable Long pefId, @RequestHeader(name = "Authorization") String token) {
 		// devuelve el registro de la persona en la vista
 		List<FuncionarioView> lista = funcionarioService.findByUpsIdPadreAndProyIdAndPefId(upsIdPadre, proyId, pefId);
-		LOGGER.info("Funcionarios findByUpsIdPadreAndProyIdAndTpefId: " + lista.toString());
+		LOGGER.info("Funcionarios findByUpsIdPadreAndProyIdAndTpefId: " + lista.toString() + " usuario: "
+				+ util.filterUsuId(token));
 		return lista;
-	}
-
-	@Override
-	public String getErrorPath() {
-		// TODO Auto-generated method stub
-		return PATH;
 	}
 
 	@RequestMapping(value = "/findProyByPerId/{perId}", method = RequestMethod.GET)
@@ -216,7 +222,13 @@ public class FuncionarioController implements ErrorController {
 			@RequestHeader(name = "Authorization") String token) {
 		// devuelve el registro de la persona en la vista
 		List<ProyectoDTO> lista = funcionarioService.findProyByPerId(perId);
-		LOGGER.info("Proyectos por Funcionario: " + lista.toString());
+		LOGGER.info("Proyectos por Funcionario: " + lista.toString() + " usuario: " + util.filterUsuId(token));
 		return lista;
+	}
+
+	@Override
+	public String getErrorPath() {
+		// TODO Auto-generated method stub
+		return PATH;
 	}
 }
