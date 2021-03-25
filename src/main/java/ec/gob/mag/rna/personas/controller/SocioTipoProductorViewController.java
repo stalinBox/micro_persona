@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.dto.ProductorOrganizacionDTO;
 import ec.gob.mag.rna.personas.services.SocioTipoProductorViewService;
+import ec.gob.mag.rna.personas.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -41,13 +42,18 @@ public class SocioTipoProductorViewController implements ErrorController {
 	@Qualifier("sociotipoproductorviewService")
 	private SocioTipoProductorViewService sociotipoproductorviewService;
 
+	@Autowired
+	@Qualifier("util")
+	private Util util;
+
 	@RequestMapping(value = "/findByCedula/{cedula}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca un socio tipo productor por numero de cedula")
 	@ResponseStatus(HttpStatus.OK)
 	public Persona getProductorByCedula(@Valid @PathVariable String cedula,
 			@RequestHeader(name = "Authorization") String token) {
 		Persona persona = sociotipoproductorviewService.findProductorByIdentificacion(cedula);
-		LOGGER.info("Socio Tipo Productor findByCedula: " + persona.toString());
+		LOGGER.info(
+				"Socio Tipo Productor findByCedula: " + persona.toString() + " usuario: " + util.filterUsuId(token));
 		return persona;
 	}
 
@@ -57,7 +63,8 @@ public class SocioTipoProductorViewController implements ErrorController {
 	public List<Persona> findByOrgId(@Valid @PathVariable Long orgId,
 			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = sociotipoproductorviewService.findByOrgId(orgId);
-		LOGGER.info("Socio Tipo Productores findByOrgId: " + personas.toString());
+		LOGGER.info(
+				"Socio Tipo Productores findByOrgId: " + personas.toString() + " usuario: " + util.filterUsuId(token));
 		return personas;
 	}
 
@@ -68,7 +75,8 @@ public class SocioTipoProductorViewController implements ErrorController {
 	public List<Persona> getProductorByUbiId(@Valid @PathVariable Long ubiId,
 			@RequestHeader(name = "Authorization") String token) {
 		List<Persona> personas = sociotipoproductorviewService.findByUbiId(ubiId);
-		LOGGER.info("Socio Tipos Productores findByUbiId: " + personas.toString());
+		LOGGER.info(
+				"Socio Tipos Productores findByUbiId: " + personas.toString() + " usuario: " + util.filterUsuId(token));
 		return personas;
 	}
 
@@ -78,7 +86,8 @@ public class SocioTipoProductorViewController implements ErrorController {
 	public List<ProductorOrganizacionDTO> findOrgByPetiId(@Valid @PathVariable Long petiId,
 			@RequestHeader(name = "Authorization") String token) {
 		List<ProductorOrganizacionDTO> proorgs = sociotipoproductorviewService.findByPetiId(petiId);
-		LOGGER.info("Socio Tipo Productores findByPetiId: " + proorgs.toString());
+		LOGGER.info(
+				"Socio Tipo Productores findByPetiId: " + proorgs.toString() + " usuario: " + util.filterUsuId(token));
 		return proorgs;
 	}
 

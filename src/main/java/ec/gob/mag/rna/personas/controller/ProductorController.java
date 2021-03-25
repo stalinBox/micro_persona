@@ -38,6 +38,7 @@ import ec.gob.mag.rna.personas.dto.ResponseUpdate;
 import ec.gob.mag.rna.personas.services.PersonaTipoService;
 import ec.gob.mag.rna.personas.services.ProductorService;
 import ec.gob.mag.rna.personas.util.ConvertEntityUtil;
+import ec.gob.mag.rna.personas.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -71,6 +72,10 @@ public class ProductorController implements ErrorController {
 	@Qualifier("convertEntityUtil")
 	private ConvertEntityUtil convertEntityUtil;
 
+	@Autowired
+	@Qualifier("util")
+	private Util util;
+
 	/************
 	 * METODOS SAVE CON VALIDACIONES
 	 * 
@@ -90,7 +95,7 @@ public class ProductorController implements ErrorController {
 		Object productorB = productor;
 		Persona productorValidado = convertEntityUtil.ConvertSingleEntityGET(Persona.class, productorB);
 		Object productorResponse = productorService.saveProductor(productorValidado);
-		LOGGER.info("Productor Create: " + productorResponse.toString());
+		LOGGER.info("Productor Create: " + productorResponse.toString() + " usuario: " + util.filterUsuId(token));
 		return productorResponse;
 	}
 
@@ -103,7 +108,7 @@ public class ProductorController implements ErrorController {
 		Object productorB = productor;
 		Persona productorValidado = convertEntityUtil.ConvertSingleEntityGET(Persona.class, productorB);
 		Object productorResponse = productorService.updateProductor(productorValidado);
-		LOGGER.info("Productor update: " + productorResponse.toString());
+		LOGGER.info("Productor update: " + productorResponse.toString() + " usuario: " + util.filterUsuId(token));
 		return productorResponse;
 	}
 
@@ -117,7 +122,8 @@ public class ProductorController implements ErrorController {
 	public Optional<Persona> getSPProductorByCedula(@Valid @PathVariable String cedula,
 			@RequestHeader(name = "Authorization") String token) {
 		Optional<Persona> procedureProductor = productorService.findProductorSPByIdentificacion(cedula);
-		LOGGER.info("Productor findByCedula: " + procedureProductor.toString());
+		LOGGER.info(
+				"Productor findByCedula: " + procedureProductor.toString() + " usuario: " + util.filterUsuId(token));
 		return procedureProductor;
 	}
 
@@ -128,7 +134,7 @@ public class ProductorController implements ErrorController {
 	public Optional<Persona> getSPProductorByPerId(@Valid @PathVariable Long perId,
 			@RequestHeader(name = "Authorization") String token) {
 		Optional<Persona> procedureProductor = productorService.findByperId(perId);
-		LOGGER.info("Productor findById: " + procedureProductor.toString());
+		LOGGER.info("Productor findById: " + procedureProductor.toString() + " usuario: " + util.filterUsuId(token));
 		return procedureProductor;
 	}
 
@@ -174,6 +180,8 @@ public class ProductorController implements ErrorController {
 			else
 				dataTableResult.setRecordsFiltered(Integer.toString(userList.size()));
 		}
+
+		LOGGER.info("findByUbiIdPaginated usuario: " + util.filterUsuId(token));
 		return (new Gson()).toJson(dataTableResult);
 	}
 
