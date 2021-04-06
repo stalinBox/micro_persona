@@ -30,7 +30,7 @@ public interface FuncionarioRepository extends CrudRepository<FuncionarioView, L
 	@Query(value = "SELECT * FROM sc_organizacion.tfcs "
 			+ "WHERE ups_id_padre = (SELECT ups_id FROM sc_organizacion.tfcs "
 			+ "WHERE proy_id = :proyId AND per_id = :perId AND pef_id = :pefIdPadre)AND pef_id = :pefIdHijo AND usup_id "
-			+ "NOT IN (SELECT usup_id FROM sc_renagro.integrante_brigada WHERE intb_estado = 1)", nativeQuery = true)
+			+ "NOT IN (SELECT usup_id FROM sc_renagro.integrante_brigada WHERE intb_estado = 1 AND rol_id=29)", nativeQuery = true)
 	List<FuncionarioView> findSupervisores(@Param("perId") Long perId, @Param("pefIdPadre") Long pefIdPadre,
 			@Param("pefIdHijo") Long pefIdHijo, @Param("proyId") Long proyId);
 }
