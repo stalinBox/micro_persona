@@ -13,9 +13,14 @@ public class CedulaValidator implements ConstraintValidator<CedulaVerificador, O
 	@Override
 	public boolean isValid(Object value, ConstraintValidatorContext context) {
 		Util util = new Util();
-		if (util.verificarCedula(value.toString())) {
-			return true;
-		} else {
+		try {
+			if (util.validarCedula(value.toString())) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
