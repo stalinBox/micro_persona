@@ -9,7 +9,6 @@ import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
 import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
-import ec.gob.mag.rna.personas.repository.OrganizacionRepository;
 import ec.gob.mag.rna.personas.repository.PersonaRepository;
 import ec.gob.mag.rna.personas.util.MyExceptionUtility;
 
