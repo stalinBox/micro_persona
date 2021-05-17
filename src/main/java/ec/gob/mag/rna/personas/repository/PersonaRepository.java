@@ -40,4 +40,12 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 			+ "INNER JOIN Persona p ON p.id = pt.persona WHERE p.perIdentificacion=?1 AND "
 			+ "pt.petiEstado = 11 AND pt.petiEliminado = FALSE AND pt.catTipoPer=46")
 	Optional<Persona> findByperIdentificacion(String identificacion);
+	
+	@Query(value = "select * from sc_organizacion.persona p" + 
+			" inner join sc_organizacion.persona_tipo pt on p.per_id = pt.per_id" + 
+			" join sc_organizacion.area a on pt.area_id = a.area_id" + 
+			" join sc_organizacion.organizacion o on a.org_id = o.org_id" + 
+			" where o.org_identificacion = ?1 and pt.cat_tipo_per = 49",  nativeQuery = true)
+	Optional<Persona> findRepresentanteLegal(String orgId);
+	
 }
