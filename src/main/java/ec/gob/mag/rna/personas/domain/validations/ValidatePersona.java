@@ -356,6 +356,12 @@ public class ValidatePersona implements Serializable {
 	@JsonInclude(Include.NON_NULL)
 	private String catEtniaOtra;
 
+	@ApiModelProperty(value = "Guarda el codigo residente de galapagos")
+	@Column(name = "per_residente_galap")
+	@JsonProperty("perResidenteGalap")
+	@JsonInclude(Include.NON_NULL)
+	private String perResidenteGalap;
+
 	@ApiModelProperty(value = "Variable transitoria de petiId", required = true)
 	@Transient
 	@JsonProperty("petiId")

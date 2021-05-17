@@ -38,6 +38,13 @@ public class ProyectoDTO {
 	@JsonInclude(Include.NON_NULL)
 	private String proyAbreviatura;
 
+	@ApiModelProperty(value = "Campo que extrae el id de la tabla usuario persona", allowableValues = "")
+	@JsonProperty("usupId")
+	private Long usupId;
+
+	@JsonProperty("upefId")
+	private Long upefId;
+
 	@ApiModelProperty(notes = "Perfiles", position = 5)
 	@JsonProperty("perfiles")
 	@JsonInclude(Include.NON_NULL)

@@ -210,7 +210,8 @@ public class FuncionarioService {
 			p.setProyId(t.getProyId());
 			p.setProyAbreviatura(t.getProyAbreviatura());
 			p.setProyNombre(t.getProyNombre());
-
+			p.setUpefId(t.getUpefId());
+			p.setUsupId(t.getUsupId());
 			proyectos.add(p);
 
 			PerfilDTO per = new PerfilDTO();
