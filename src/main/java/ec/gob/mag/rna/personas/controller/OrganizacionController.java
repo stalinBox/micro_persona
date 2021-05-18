@@ -24,9 +24,11 @@ import io.swagger.annotations.ApiResponse;
 @RequestMapping("/organizacion")
 @Api(value = "Organizacion", description = "Busqueda representante legal de Organizacion", tags = "Organizacion")
 @ApiResponses(value = { @ApiResponse(code = 200, message = "Objeto recuperado"),
-		@ApiResponse(code = 201, message = "Objeto creado"),
-		@ApiResponse(code = 404, message = "Recurso no encontrado"),
-		@ApiResponse(code = 500, message = "Error interno") })
+		@ApiResponse(code = 200, message = "SUCESS"), @ApiResponse(code = 404, message = "RESOURCE NOT FOUND"),
+		@ApiResponse(code = 400, message = "BAD REQUEST"), @ApiResponse(code = 201, message = "CREATED"),
+		@ApiResponse(code = 401, message = "UNAUTHORIZED"),
+		@ApiResponse(code = 415, message = "UNSUPPORTED TYPE - Representation not supported for the resource"),
+		@ApiResponse(code = 500, message = "SERVER ERROR") })
 public class OrganizacionController implements ErrorController {
 	private static final String PATH = "/error";
 	public static final Logger LOGGER = LoggerFactory.getLogger(OrganizacionController.class);

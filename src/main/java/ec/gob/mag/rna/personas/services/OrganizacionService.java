@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
@@ -36,13 +37,12 @@ public class OrganizacionService {
 	 * @return Persona, reprsentante legal organizacion
 	 */
 	public Optional<Persona> findRepresentanteLegal(String orgIdentificacion) {
-		Optional<Persona> persona = personaRepository.findRepresentanteLegal(orgIdentificacion);
-		if (persona.equals(null)) {
-			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message", orgIdentificacion,
-					this.getClass(), "findRepresentanteLegal", EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB,
-					messageSource);
-			throw new MyNotFoundException(msg);
-		}
+		Optional<Persona> persona = personaRepository.findRepresentanteLegal(orgIdentificacion);		
+		if (!persona.isPresent())
+			throw new MyNotFoundException(String.format(
+					messageSource.getMessage("error.entity_cero_exist.message", null, LocaleContextHolder.getLocale()),
+					orgIdentificacion));
+		
 		return persona;
 	}
 
