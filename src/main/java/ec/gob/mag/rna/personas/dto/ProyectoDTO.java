@@ -42,8 +42,8 @@ public class ProyectoDTO {
 	@JsonProperty("usupId")
 	private Long usupId;
 
-	@JsonProperty("upefId")
-	private Long upefId;
+//	@JsonProperty("upefId")
+//	private Long upefId;
 
 	@ApiModelProperty(notes = "Perfiles", position = 5)
 	@JsonProperty("perfiles")
