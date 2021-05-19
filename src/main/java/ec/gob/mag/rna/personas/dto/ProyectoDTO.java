@@ -50,4 +50,9 @@ public class ProyectoDTO {
 	@JsonInclude(Include.NON_NULL)
 	private List<PerfilDTO> perfiles = new ArrayList<PerfilDTO>();
 
+	@ApiModelProperty(notes = "Perfiles", position = 5)
+	@JsonProperty("usuarioPerfiles")
+	@JsonInclude(Include.NON_NULL)
+	private List<UsuarioPerfilDTO> usuarioPerfil = new ArrayList<UsuarioPerfilDTO>();
+
 }

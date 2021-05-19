@@ -14,6 +14,7 @@ import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.domain.view.FuncionarioView;
 import ec.gob.mag.rna.personas.dto.PerfilDTO;
 import ec.gob.mag.rna.personas.dto.ProyectoDTO;
+import ec.gob.mag.rna.personas.dto.UsuarioPerfilDTO;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
 import ec.gob.mag.rna.personas.repository.FuncionarioRepository;
 import ec.gob.mag.rna.personas.util.MyExceptionUtility;
@@ -203,6 +204,7 @@ public class FuncionarioService {
 
 		List<ProyectoDTO> proyectos = new ArrayList<ProyectoDTO>();
 		List<PerfilDTO> perfiles = new ArrayList<PerfilDTO>();
+		List<UsuarioPerfilDTO> usu_perfil = new ArrayList<UsuarioPerfilDTO>();
 
 		tfcs.stream().map(t -> {
 			ProyectoDTO p = new ProyectoDTO();
@@ -221,6 +223,10 @@ public class FuncionarioService {
 			per.setPefId(t.getPefId());
 			perfiles.add(per);
 
+			UsuarioPerfilDTO up = new UsuarioPerfilDTO();
+			up.setId(t.getUpefId());
+			up.setPefId(t.getPefId());
+			usu_perfil.add(up);
 			return t;
 		}).collect(Collectors.toList());
 
@@ -234,6 +240,12 @@ public class FuncionarioService {
 					pr.getPerfiles().add(perf);
 				return perf;
 			}).collect(Collectors.toList());
+
+			usu_perfil.stream().map(up -> {
+				pr.getUsuarioPerfil().add(up);
+				return up;
+			}).collect(Collectors.toList());
+
 			return pr;
 		}).collect(Collectors.toList());
 
