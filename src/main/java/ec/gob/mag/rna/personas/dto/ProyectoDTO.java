@@ -42,8 +42,6 @@ public class ProyectoDTO {
 	@JsonProperty("usupId")
 	private Long usupId;
 
-//	@JsonProperty("upefId")
-//	@JsonInclude(Include.NON_NULL)
 //	private Long upefId;
 
 	@ApiModelProperty(notes = "Perfiles", position = 5)
