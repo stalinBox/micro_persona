@@ -135,7 +135,6 @@ public class FuncionarioController implements ErrorController {
 		return funcionario;
 	}
 
-	// ok
 	@RequestMapping(value = "/findByPerIdAndProyIdAndPefIdPadrePefIdHijos/{perId}/{proyId}/{pefIdPadre}/{pefIdHijos}", method = RequestMethod.GET)
 	@ApiOperation(value = "Obtiene los funcionarios a cargo de perId", response = FuncionarioView.class)
 	public List<FuncionarioView> findByPerIdAndProyIdAndTpefIdPadreTpefIdHijos(@PathVariable Long perId,
