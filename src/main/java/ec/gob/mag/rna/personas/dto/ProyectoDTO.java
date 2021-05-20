@@ -42,12 +42,17 @@ public class ProyectoDTO {
 	@JsonProperty("usupId")
 	private Long usupId;
 
-	@JsonProperty("upefId")
-	private Long upefId;
+//	@JsonProperty("upefId")
+//	private Long upefId;
 
 	@ApiModelProperty(notes = "Perfiles", position = 5)
 	@JsonProperty("perfiles")
 	@JsonInclude(Include.NON_NULL)
 	private List<PerfilDTO> perfiles = new ArrayList<PerfilDTO>();
+
+	@ApiModelProperty(notes = "Perfiles", position = 5)
+	@JsonProperty("usuarioPerfiles")
+	@JsonInclude(Include.NON_NULL)
+	private List<UsuarioPerfilDTO> usuarioPerfil = new ArrayList<UsuarioPerfilDTO>();
 
 }
