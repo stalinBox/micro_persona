@@ -45,8 +45,7 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 			" inner join sc_organizacion.persona_tipo pt on p.per_id = pt.per_id" + 
 			" join sc_organizacion.area a on pt.area_id = a.area_id" + 
 			" join sc_organizacion.organizacion o on a.org_id = o.org_id" + 
-			" where o.org_identificacion = ?1 and pt.cat_tipo_per = 49"+
-			" and pt.peti_eliminado=false and pt.peti_estado=11 and p.per_estado=11 and p.per_eliminado=false",  nativeQuery = true)
+			" where o.org_identificacion = ?1 and pt.cat_tipo_per = 49",  nativeQuery = true)
 	Optional<Persona> findRepresentanteLegal(String orgId);
 	
 }
