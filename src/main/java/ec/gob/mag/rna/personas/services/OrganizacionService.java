@@ -11,8 +11,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import ec.gob.mag.rna.personas.domain.Persona;
 import ec.gob.mag.rna.personas.domain.PersonaTipo;
+import ec.gob.mag.rna.personas.exception.EnumCodeExceptions;
+import ec.gob.mag.rna.personas.exception.EnumTypeExceptions;
 import ec.gob.mag.rna.personas.exception.MyNotFoundException;
 import ec.gob.mag.rna.personas.repository.PersonaRepository;
+import ec.gob.mag.rna.personas.util.MyExceptionUtility;
 
 /**
  * Clase OrganizacionService.
@@ -50,6 +53,25 @@ public class OrganizacionService {
 		persona.get().setPersonaTipos(tiposPer);
 		
 		return persona;
+	}
+	
+	
+	/**
+	 * Busca una persona dado un orgId
+	 *
+	 * @param Long orgId
+	 * @return List<Persona>
+	 */
+	public List<Persona> findSocios(Long orgId) {
+
+		List<Persona> personas = personaRepository.findSocios(orgId);
+		if (personas == null || personas.size() == 0) {
+			String msg = MyExceptionUtility.buildExceptionJsonString("error.entity_not_exist.message",
+					orgId.toString(), this.getClass(), "findSocios",
+					EnumTypeExceptions.INFO, EnumCodeExceptions.DATA_NOT_FOUND_DB, messageSource);
+			throw new MyNotFoundException(msg);
+		}
+		return personas;
 	}
 
 }

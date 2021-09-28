@@ -373,5 +373,5 @@ public class Persona implements Serializable {
 		this.perActFecha = new Date();
 //		this.perFuenteFecha = new Date();
 	}
-
+	
 }

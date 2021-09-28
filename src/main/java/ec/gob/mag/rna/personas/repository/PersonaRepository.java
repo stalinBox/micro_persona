@@ -49,4 +49,10 @@ public interface PersonaRepository extends CrudRepository<Persona, Long> {
 			" and pt.peti_eliminado=false and pt.peti_estado=11 and p.per_estado=11 and p.per_eliminado=false",  nativeQuery = true)
 	Optional<Persona> findRepresentanteLegal(String orgId);
 	
+	
+	@Query(value="select * from sc_organizacion.persona p"
+			+ " inner join sc_organizacion.socios s on p.per_id = s.per_id"
+			+ " join sc_organizacion.organizacion o on o.org_id = s.org_id"
+			+ " where o.org_id = ?1 and p.per_estado = 11 and p.per_eliminado =false", nativeQuery = true)
+	List<Persona> findSocios(Long orgId);
 }

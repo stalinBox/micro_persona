@@ -178,6 +178,9 @@ public class PersonaController implements ErrorController {
 		return (new Gson()).toJson(dataTableResult);
 	}
 
+	
+
+	
 	@Override
 	public String getErrorPath() {
 		// TODO Auto-generated method stub

@@ -16,6 +16,9 @@ import ec.gob.mag.rna.personas.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.swagger.annotations.ApiResponse;
@@ -49,6 +52,19 @@ public class OrganizacionController implements ErrorController {
 		LOGGER.info("/organizacion/findRepresentanteLegal/" + " usuario: " + util.filterUsuId(token));
 		return persona;
 	}
+	
+	
+	@RequestMapping(value = "/findSocios/{orgId}", method = RequestMethod.GET)
+	@ApiOperation(value = "Devuelve  los socios de una organizacion", response = Persona.class)
+	@ResponseStatus(HttpStatus.OK)
+	public List<Persona> findSocios(@PathVariable Long orgId, @RequestHeader(name = "Authorization") String token) {
+		List<Persona> personas = organizacionService.findSocios(orgId);
+		LOGGER.info("/organizacion/findSocios/ " + orgId.toString() + " usuario: " + util.filterUsuId(token));
+		return personas;
+	}
+	
+	
+	
 
 	@Override
 	public String getErrorPath() {
